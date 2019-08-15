@@ -1,0 +1,727 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     30718,        719]
+NotebookOptionsPosition[     30029,        695]
+NotebookOutlinePosition[     30414,        712]
+CellTagsIndexPosition[     30371,        709]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"degtorad", "[", "\[Theta]_", "]"}], ":=", 
+  RowBox[{"\[Theta]", "*", 
+   RowBox[{"\[Pi]", "/", "180"}]}]}]], "Input",
+ CellChangeTimes->{{3.710028114425315*^9, 
+  3.710028135288906*^9}},ExpressionUUID->"5d4f8766-c8d1-412a-914b-\
+4a86b154da8f"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"rotx", "[", "\[Phi]_", "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"1", ",", "0", ",", "0"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", 
+      RowBox[{"Cos", "[", "\[Phi]", "]"}], ",", 
+      RowBox[{"-", 
+       RowBox[{"Sin", "[", "\[Phi]", "]"}]}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", 
+      RowBox[{"Sin", "[", "\[Phi]", "]"}], ",", 
+      RowBox[{"Cos", "[", "\[Phi]", "]"}]}], "}"}]}], 
+   "}"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"prism", "[", 
+   RowBox[{"\[Theta]_", ",", "\[Phi]_", ",", "x_", ",", "sign_"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"rotx", "[", "\[Phi]", "]"}], ".", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"sign", " ", "4", 
+         RowBox[{"Tan", "[", 
+          RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}]}], "+", "x"}], 
+       ",", 
+       RowBox[{"-", "2"}], ",", "2"}], "}"}]}], ",", 
+    RowBox[{
+     RowBox[{"rotx", "[", "\[Phi]", "]"}], ".", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"0", "+", "x"}], ",", 
+       RowBox[{"-", "2"}], ",", "2"}], "}"}]}], ",", 
+    RowBox[{
+     RowBox[{"rotx", "[", "\[Phi]", "]"}], ".", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"0", "+", "x"}], ",", 
+       RowBox[{"-", "2"}], ",", 
+       RowBox[{"-", "2"}]}], "}"}]}], ",", 
+    RowBox[{
+     RowBox[{"rotx", "[", "\[Phi]", "]"}], ".", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"sign", " ", "4", 
+         RowBox[{"Tan", "[", 
+          RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}]}], "+", "x"}], 
+       ",", "2", ",", "2"}], "}"}]}], ",", 
+    RowBox[{
+     RowBox[{"rotx", "[", "\[Phi]", "]"}], ".", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"0", "+", "x"}], ",", "2", ",", "2"}], "}"}]}], ",", 
+    RowBox[{
+     RowBox[{"rotx", "[", "\[Phi]", "]"}], ".", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"0", "+", "x"}], ",", "2", ",", 
+       RowBox[{"-", "2"}]}], "}"}]}]}], "}"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vrefrac", "[", 
+   RowBox[{"n1_", ",", "n2_", ",", "l_", ",", "n_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    FractionBox["n1", "n2"], " ", "l"}], "+", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"-", 
+        FractionBox["n1", "n2"]}], " ", 
+       RowBox[{"(", 
+        RowBox[{"n", ".", "l"}], ")"}]}], "-", 
+      SqrtBox[
+       RowBox[{"1", "-", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           FractionBox["n1", "n2"], ")"}], "^", "2"}], 
+         RowBox[{"(", 
+          RowBox[{"1", "-", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"n", ".", "l"}], ")"}], "^", "2"}]}], ")"}]}]}]]}], 
+     ")"}], "n"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"intpara", "[", 
+   RowBox[{"lo_", ",", "vecline_", ",", "po_", ",", "nsurf_"}], "]"}], ":=", 
+  FractionBox[
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"po", "-", "lo"}], ")"}], ".", "nsurf"}], 
+   RowBox[{"vecline", ".", "nsurf"}]]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"survec", "[", 
+   RowBox[{"\[Theta]_", ",", "\[Phi]_", ",", "sign_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"rotx", "[", "\[Phi]", "]"}], ".", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"sign", " ", 
+      RowBox[{"Cos", "[", "\[Theta]", "]"}]}], ",", "0", ",", 
+     RowBox[{"-", 
+      RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}], "}"}]}]}]}], "Input",
+ CellChangeTimes->{{3.709942498092991*^9, 3.709942522694451*^9}, {
+  3.70994885041816*^9, 3.7099488619073086`*^9}, {3.709948937237841*^9, 
+  3.709948937485866*^9}},ExpressionUUID->"febb6144-06df-4b9f-b05f-\
+833eae56fec0"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Show", "[", 
+    RowBox[{"{", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"Orange", ",", "Thick", ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"-", "2"}], 
+                RowBox[{"Tan", "[", 
+                 RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+", 
+               "x1"}], ",", "0", ",", "0"}], "}"}], ",", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{"-", "2"}], 
+                 RowBox[{"Tan", "[", 
+                  RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+", 
+                "x1"}], ",", "0", ",", "0"}], "}"}], "+", 
+             RowBox[{"2", 
+              RowBox[{"survec", "[", 
+               RowBox[{
+                RowBox[{"degtorad", "[", "\[Theta]1", "]"}], ",", 
+                RowBox[{"degtorad", "[", "\[Phi]1", "]"}], ",", 
+                RowBox[{"-", "1"}]}], "]"}]}]}]}], "}"}], "]"}], ",", "Green",
+          ",", 
+         RowBox[{"Opacity", "[", ".3", "]"}], ",", 
+         RowBox[{"Prism", "[", 
+          RowBox[{"prism", "[", 
+           RowBox[{"\[Theta]1", ",", 
+            RowBox[{"degtorad", "[", "\[Phi]1", "]"}], ",", "x1", ",", 
+            RowBox[{"-", "1"}]}], "]"}], "]"}], ",", "\[IndentingNewLine]", 
+         "Orange", ",", "Thick", ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"2", 
+                RowBox[{"Tan", "[", 
+                 RowBox[{"degtorad", "[", "\[Theta]2", "]"}], "]"}]}], "+", 
+               "x2"}], ",", "0", ",", "0"}], "}"}], ",", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"2", 
+                 RowBox[{"Tan", "[", 
+                  RowBox[{"degtorad", "[", "\[Theta]2", "]"}], "]"}]}], "+", 
+                "x2"}], ",", "0", ",", "0"}], "}"}], "+", 
+             RowBox[{"2", 
+              RowBox[{"survec", "[", 
+               RowBox[{
+                RowBox[{"degtorad", "[", "\[Theta]2", "]"}], ",", 
+                RowBox[{"degtorad", "[", "\[Phi]2", "]"}], ",", "1"}], 
+               "]"}]}]}]}], "}"}], "]"}], ",", "\[IndentingNewLine]", "Blue", 
+         ",", 
+         RowBox[{"Opacity", "[", ".3", "]"}], ",", 
+         RowBox[{"Prism", "[", 
+          RowBox[{"prism", "[", 
+           RowBox[{"\[Theta]2", ",", 
+            RowBox[{"degtorad", "[", "\[Phi]2", "]"}], ",", "x2", ",", "1"}], 
+           "]"}], "]"}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+         "Red", ",", "Thick", ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "5"}], ",", 
+              RowBox[{"5", " ", 
+               RowBox[{"Tan", "[", 
+                RowBox[{"degtorad", "[", "\[Alpha]", "]"}], "]"}]}], ",", 
+              RowBox[{"5", " ", 
+               RowBox[{"Tan", "[", 
+                RowBox[{"degtorad", "[", "\[Beta]", "]"}], "]"}]}]}], "}"}], 
+            ",", "\[IndentingNewLine]", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"-", "2"}], 
+                RowBox[{"Tan", "[", 
+                 RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+", 
+               "x1"}], ",", "0", ",", "0"}], "}"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{"-", "2"}], 
+                 RowBox[{"Tan", "[", 
+                  RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+", 
+                "x1"}], ",", "0", ",", "0"}], "}"}], "+", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"intpara", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"-", "2"}], 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+",
+                    "x1"}], ",", "0", ",", "0"}], "}"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"vrefrac", "[", 
+                 RowBox[{"1", ",", "n1", ",", 
+                  RowBox[{"Normalize", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"-", "2"}], 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+",
+                     "x1"}], ",", "0", ",", "0"}], "}"}], "-", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"-", "5"}], ",", 
+                    RowBox[{"5", " ", 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Alpha]", "]"}], "]"}]}], ",", 
+                    RowBox[{"5", " ", 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Beta]", "]"}], "]"}]}]}], 
+                    "}"}]}], "]"}], ",", "\[IndentingNewLine]", 
+                  RowBox[{"survec", "[", 
+                   RowBox[{
+                    RowBox[{"degtorad", "[", "\[Theta]1", "]"}], ",", 
+                    RowBox[{"degtorad", "[", "\[Phi]1", "]"}], ",", 
+                    RowBox[{"-", "1"}]}], "]"}]}], "]"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"2", 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Theta]2", "]"}], "]"}]}], "+",
+                    "x2"}], ",", "0", ",", "0"}], "}"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"survec", "[", 
+                 RowBox[{
+                  RowBox[{"degtorad", "[", "\[Theta]2", "]"}], ",", 
+                  RowBox[{"degtorad", "[", "\[Phi]2", "]"}], ",", "1"}], 
+                 "]"}]}], "]"}], " ", "\[IndentingNewLine]", 
+              "\[IndentingNewLine]", 
+              RowBox[{"vrefrac", "[", 
+               RowBox[{"1", ",", "n1", ",", 
+                RowBox[{"Normalize", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"-", "2"}], 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+",
+                     "x1"}], ",", "0", ",", "0"}], "}"}], "-", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"-", "5"}], ",", 
+                    RowBox[{"5", " ", 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Alpha]", "]"}], "]"}]}], ",", 
+                    RowBox[{"5", " ", 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Beta]", "]"}], "]"}]}]}], 
+                   "}"}]}], "]"}], ",", 
+                RowBox[{"survec", "[", 
+                 RowBox[{
+                  RowBox[{"degtorad", "[", "\[Theta]1", "]"}], ",", 
+                  RowBox[{"degtorad", "[", "\[Phi]1", "]"}], ",", 
+                  RowBox[{"-", "1"}]}], "]"}]}], "]"}]}]}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{"-", "2"}], 
+                 RowBox[{"Tan", "[", 
+                  RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+", 
+                "x1"}], ",", "0", ",", "0"}], "}"}], "+", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"intpara", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"-", "2"}], 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+",
+                    "x1"}], ",", "0", ",", "0"}], "}"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"vrefrac", "[", 
+                 RowBox[{"1", ",", "n1", ",", 
+                  RowBox[{"Normalize", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"-", "2"}], 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+",
+                     "x1"}], ",", "0", ",", "0"}], "}"}], "-", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"-", "5"}], ",", 
+                    RowBox[{"5", " ", 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Alpha]", "]"}], "]"}]}], ",", 
+                    RowBox[{"5", " ", 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Beta]", "]"}], "]"}]}]}], 
+                    "}"}]}], "]"}], ",", "\[IndentingNewLine]", 
+                  RowBox[{"survec", "[", 
+                   RowBox[{
+                    RowBox[{"degtorad", "[", "\[Theta]1", "]"}], ",", 
+                    RowBox[{"degtorad", "[", "\[Phi]1", "]"}], ",", 
+                    RowBox[{"-", "1"}]}], "]"}]}], "]"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"2", 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Theta]2", "]"}], "]"}]}], "+",
+                    "x2"}], ",", "0", ",", "0"}], "}"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"survec", "[", 
+                 RowBox[{
+                  RowBox[{"degtorad", "[", "\[Theta]2", "]"}], ",", 
+                  RowBox[{"degtorad", "[", "\[Phi]2", "]"}], ",", "1"}], 
+                 "]"}]}], "]"}], " ", "\[IndentingNewLine]", 
+              RowBox[{"vrefrac", "[", 
+               RowBox[{"1", ",", "n1", ",", 
+                RowBox[{"survec", "[", 
+                 RowBox[{
+                  RowBox[{"degtorad", "[", "\[Theta]1", "]"}], ",", "0", ",", 
+                  "1"}], "]"}], ",", 
+                RowBox[{"survec", "[", 
+                 RowBox[{
+                  RowBox[{"degtorad", "[", "\[Theta]1", "]"}], ",", 
+                  RowBox[{"degtorad", "[", "\[Phi]1", "]"}], ",", 
+                  RowBox[{"-", "1"}]}], "]"}]}], "]"}]}], "+", 
+             "\[IndentingNewLine]", 
+             RowBox[{"20", 
+              RowBox[{"vrefrac", "[", 
+               RowBox[{"n2", ",", "1", ",", 
+                RowBox[{"vrefrac", "[", 
+                 RowBox[{"1", ",", "n1", ",", 
+                  RowBox[{"Normalize", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"-", "2"}], 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Theta]1", "]"}], "]"}]}], "+",
+                     "x1"}], ",", "0", ",", "0"}], "}"}], "-", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"-", "5"}], ",", 
+                    RowBox[{"5", " ", 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Alpha]", "]"}], "]"}]}], ",", 
+                    RowBox[{"5", " ", 
+                    RowBox[{"Tan", "[", 
+                    RowBox[{"degtorad", "[", "\[Beta]", "]"}], "]"}]}]}], 
+                    "}"}]}], "]"}], ",", 
+                  RowBox[{"survec", "[", 
+                   RowBox[{
+                    RowBox[{"degtorad", "[", "\[Theta]1", "]"}], ",", 
+                    RowBox[{"degtorad", "[", "\[Phi]1", "]"}], ",", 
+                    RowBox[{"-", "1"}]}], "]"}]}], "]"}], ",", 
+                RowBox[{"-", 
+                 RowBox[{"survec", "[", 
+                  RowBox[{
+                   RowBox[{"degtorad", "[", "\[Theta]2", "]"}], ",", 
+                   RowBox[{"degtorad", "[", "\[Phi]2", "]"}], ",", "1"}], 
+                  "]"}]}]}], "]"}]}]}]}], "\[IndentingNewLine]", "}"}], 
+          "]"}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", "}"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "5"}], ",", "5"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "5"}], ",", "5"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "5"}], ",", "5"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"Axes", "\[Rule]", "True"}]}], "]"}], "}"}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\[Theta]1", ",", "5", ",", "45"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Phi]1", ",", "0"}], "}"}], ",", 
+     RowBox[{"-", "180"}], ",", "180"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\[Theta]2", ",", "5", ",", "45"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Phi]2", ",", "0"}], "}"}], ",", 
+     RowBox[{"-", "180"}], ",", "180"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"x1", ",", "0"}], "}"}], ",", 
+     RowBox[{"-", "2"}], ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"x2", ",", "0"}], "}"}], ",", "0", ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"n1", ",", "1.5"}], "}"}], ",", "1", ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"n2", ",", "1.5"}], "}"}], ",", "1", ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Alpha]", ",", "0"}], "}"}], ",", 
+     RowBox[{"-", "90"}], ",", "90"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Beta]", ",", "0"}], "}"}], ",", 
+     RowBox[{"-", "90"}], ",", "90"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7099432595021243`*^9, 3.70994329996817*^9}, {
+   3.7099434121173844`*^9, 3.7099434389260645`*^9}, {3.7099434923684087`*^9, 
+   3.709943556395811*^9}, {3.709943603973568*^9, 3.7099436464878187`*^9}, {
+   3.709944297243888*^9, 3.709944450491211*^9}, {3.7099445245416155`*^9, 
+   3.7099445262297845`*^9}, {3.709944755247684*^9, 3.709944764928652*^9}, {
+   3.709944815570716*^9, 3.709944937455903*^9}, {3.7099450379249487`*^9, 
+   3.709945057932949*^9}, {3.709946089163062*^9, 3.709946184366582*^9}, {
+   3.709946218817026*^9, 3.7099463005952034`*^9}, {3.7099463882639694`*^9, 
+   3.709946437049847*^9}, {3.7099464765077925`*^9, 3.7099465601351547`*^9}, {
+   3.7099466040815487`*^9, 3.70994666740388*^9}, {3.7099467983779764`*^9, 
+   3.709946801074246*^9}, {3.709946901734311*^9, 3.709946908878025*^9}, 
+   3.709947200779213*^9, {3.7099474990000315`*^9, 3.7099475044405756`*^9}, 
+   3.7099484626883907`*^9, {3.7099485496220837`*^9, 3.7099485783189526`*^9}, {
+   3.70994863499362*^9, 3.7099486949566154`*^9}, {3.70994873320544*^9, 
+   3.709948787752894*^9}, {3.7099490662687426`*^9, 3.709949118486964*^9}, {
+   3.7099491522253375`*^9, 3.7099491618883038`*^9}, {3.709949201763291*^9, 
+   3.70994922475659*^9}, {3.709949357457859*^9, 3.709949360154128*^9}, {
+   3.709949474142526*^9, 3.7099495107281847`*^9}, {3.709949721337243*^9, 
+   3.7099497237774873`*^9}},ExpressionUUID->"ba8ca90a-0f67-4d4b-9a99-\
+1173a8d5ed35"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`n1$$ = 1.5, $CellContext`n2$$ = 
+    1.5, $CellContext`x1$$ = 0, $CellContext`x2$$ = 
+    0, $CellContext`\[Alpha]$$ = 0, $CellContext`\[Beta]$$ = 
+    0, $CellContext`\[Theta]1$$ = 5, $CellContext`\[Theta]2$$ = 
+    5, $CellContext`\[Phi]1$$ = 0, $CellContext`\[Phi]2$$ = 0, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`\[Theta]1$$], 5, 45}, {{
+       Hold[$CellContext`\[Phi]1$$], 0}, -180, 180}, {
+      Hold[$CellContext`\[Theta]2$$], 5, 45}, {{
+       Hold[$CellContext`\[Phi]2$$], 0}, -180, 180}, {{
+       Hold[$CellContext`x1$$], 0}, -2, 0}, {{
+       Hold[$CellContext`x2$$], 0}, 0, 2}, {{
+       Hold[$CellContext`n1$$], 1.5}, 1, 2}, {{
+       Hold[$CellContext`n2$$], 1.5}, 1, 2}, {{
+       Hold[$CellContext`\[Alpha]$$], 0}, -90, 90}, {{
+       Hold[$CellContext`\[Beta]$$], 0}, -90, 90}}, Typeset`size$$ = {
+    648., {366., 375.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`\[Theta]1$4339$$ = 
+    0, $CellContext`\[Phi]1$4340$$ = 0, $CellContext`\[Theta]2$4341$$ = 
+    0, $CellContext`\[Phi]2$4342$$ = 0, $CellContext`x1$4343$$ = 
+    0, $CellContext`x2$4344$$ = 0, $CellContext`n1$4345$$ = 
+    0, $CellContext`n2$4346$$ = 0, $CellContext`\[Alpha]$4347$$ = 
+    0, $CellContext`\[Beta]$4348$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`n1$$ = 1.5, $CellContext`n2$$ = 
+        1.5, $CellContext`x1$$ = 0, $CellContext`x2$$ = 
+        0, $CellContext`\[Alpha]$$ = 0, $CellContext`\[Beta]$$ = 
+        0, $CellContext`\[Theta]1$$ = 5, $CellContext`\[Theta]2$$ = 
+        5, $CellContext`\[Phi]1$$ = 0, $CellContext`\[Phi]2$$ = 0}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`\[Theta]1$$, $CellContext`\[Theta]1$4339$$, 0], 
+        Hold[$CellContext`\[Phi]1$$, $CellContext`\[Phi]1$4340$$, 0], 
+        Hold[$CellContext`\[Theta]2$$, $CellContext`\[Theta]2$4341$$, 0], 
+        Hold[$CellContext`\[Phi]2$$, $CellContext`\[Phi]2$4342$$, 0], 
+        Hold[$CellContext`x1$$, $CellContext`x1$4343$$, 0], 
+        Hold[$CellContext`x2$$, $CellContext`x2$4344$$, 0], 
+        Hold[$CellContext`n1$$, $CellContext`n1$4345$$, 0], 
+        Hold[$CellContext`n2$$, $CellContext`n2$4346$$, 0], 
+        Hold[$CellContext`\[Alpha]$$, $CellContext`\[Alpha]$4347$$, 0], 
+        Hold[$CellContext`\[Beta]$$, $CellContext`\[Beta]$4348$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Show[{
+         Graphics3D[{Orange, Thick, 
+           Line[{{(-2) Tan[
+                 $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0}, {(-2) Tan[
+                  $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0} + 2 $CellContext`survec[
+                $CellContext`degtorad[$CellContext`\[Theta]1$$], 
+                $CellContext`degtorad[$CellContext`\[Phi]1$$], -1]}], Green, 
+           Opacity[0.3], 
+           Prism[
+            $CellContext`prism[$CellContext`\[Theta]1$$, 
+             $CellContext`degtorad[$CellContext`\[Phi]1$$], \
+$CellContext`x1$$, -1]], Orange, Thick, 
+           Line[{{2 Tan[
+                 $CellContext`degtorad[$CellContext`\[Theta]2$$]] + \
+$CellContext`x2$$, 0, 0}, {2 Tan[
+                  $CellContext`degtorad[$CellContext`\[Theta]2$$]] + \
+$CellContext`x2$$, 0, 0} + 2 $CellContext`survec[
+                $CellContext`degtorad[$CellContext`\[Theta]2$$], 
+                $CellContext`degtorad[$CellContext`\[Phi]2$$], 1]}], Blue, 
+           Opacity[0.3], 
+           Prism[
+            $CellContext`prism[$CellContext`\[Theta]2$$, 
+             $CellContext`degtorad[$CellContext`\[Phi]2$$], $CellContext`x2$$,
+              1]], Red, Thick, 
+           Line[{{-5, 5 Tan[
+                $CellContext`degtorad[$CellContext`\[Alpha]$$]], 5 Tan[
+                $CellContext`degtorad[$CellContext`\[Beta]$$]]}, {(-2) Tan[
+                 $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0}, {(-2) Tan[
+                  $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0} + $CellContext`intpara[{(-2) Tan[
+                    $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0}, 
+                $CellContext`vrefrac[1, $CellContext`n1$$, 
+                 Normalize[{(-2) Tan[
+                    $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0} - {-5, 5 Tan[
+                    $CellContext`degtorad[$CellContext`\[Alpha]$$]], 5 Tan[
+                    $CellContext`degtorad[$CellContext`\[Beta]$$]]}], 
+                 $CellContext`survec[
+                  $CellContext`degtorad[$CellContext`\[Theta]1$$], 
+                  $CellContext`degtorad[$CellContext`\[Phi]1$$], -1]], {2 Tan[
+                    $CellContext`degtorad[$CellContext`\[Theta]2$$]] + \
+$CellContext`x2$$, 0, 0}, 
+                $CellContext`survec[
+                 $CellContext`degtorad[$CellContext`\[Theta]2$$], 
+                 $CellContext`degtorad[$CellContext`\[Phi]2$$], 
+                 1]] $CellContext`vrefrac[1, $CellContext`n1$$, 
+                Normalize[{(-2) Tan[
+                    $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0} - {-5, 5 Tan[
+                    $CellContext`degtorad[$CellContext`\[Alpha]$$]], 5 Tan[
+                    $CellContext`degtorad[$CellContext`\[Beta]$$]]}], 
+                $CellContext`survec[
+                 $CellContext`degtorad[$CellContext`\[Theta]1$$], 
+                 $CellContext`degtorad[$CellContext`\[Phi]1$$], -1]], {(-2) 
+                Tan[
+                  $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0} + $CellContext`intpara[{(-2) Tan[
+                    $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0}, 
+                $CellContext`vrefrac[1, $CellContext`n1$$, 
+                 Normalize[{(-2) Tan[
+                    $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0} - {-5, 5 Tan[
+                    $CellContext`degtorad[$CellContext`\[Alpha]$$]], 5 Tan[
+                    $CellContext`degtorad[$CellContext`\[Beta]$$]]}], 
+                 $CellContext`survec[
+                  $CellContext`degtorad[$CellContext`\[Theta]1$$], 
+                  $CellContext`degtorad[$CellContext`\[Phi]1$$], -1]], {2 Tan[
+                    $CellContext`degtorad[$CellContext`\[Theta]2$$]] + \
+$CellContext`x2$$, 0, 0}, 
+                $CellContext`survec[
+                 $CellContext`degtorad[$CellContext`\[Theta]2$$], 
+                 $CellContext`degtorad[$CellContext`\[Phi]2$$], 
+                 1]] $CellContext`vrefrac[1, $CellContext`n1$$, 
+                $CellContext`survec[
+                 $CellContext`degtorad[$CellContext`\[Theta]1$$], 0, 1], 
+                $CellContext`survec[
+                 $CellContext`degtorad[$CellContext`\[Theta]1$$], 
+                 $CellContext`degtorad[$CellContext`\[Phi]1$$], -1]] + 
+             20 $CellContext`vrefrac[$CellContext`n2$$, 1, 
+                $CellContext`vrefrac[1, $CellContext`n1$$, 
+                 Normalize[{(-2) Tan[
+                    $CellContext`degtorad[$CellContext`\[Theta]1$$]] + \
+$CellContext`x1$$, 0, 0} - {-5, 5 Tan[
+                    $CellContext`degtorad[$CellContext`\[Alpha]$$]], 5 Tan[
+                    $CellContext`degtorad[$CellContext`\[Beta]$$]]}], 
+                 $CellContext`survec[
+                  $CellContext`degtorad[$CellContext`\[Theta]1$$], 
+                  $CellContext`degtorad[$CellContext`\[Phi]1$$], -1]], \
+-$CellContext`survec[
+                  $CellContext`degtorad[$CellContext`\[Theta]2$$], 
+                  $CellContext`degtorad[$CellContext`\[Phi]2$$], 1]]}]}, 
+          PlotRange -> {{-5, 5}, {-5, 5}, {-5, 5}}, Axes -> True]}], 
+      "Specifications" :> {{$CellContext`\[Theta]1$$, 5, 
+         45}, {{$CellContext`\[Phi]1$$, 0}, -180, 
+         180}, {$CellContext`\[Theta]2$$, 5, 
+         45}, {{$CellContext`\[Phi]2$$, 0}, -180, 
+         180}, {{$CellContext`x1$$, 0}, -2, 0}, {{$CellContext`x2$$, 0}, 0, 
+         2}, {{$CellContext`n1$$, 1.5}, 1, 2}, {{$CellContext`n2$$, 1.5}, 1, 
+         2}, {{$CellContext`\[Alpha]$$, 0}, -90, 
+         90}, {{$CellContext`\[Beta]$$, 0}, -90, 90}}, "Options" :> {}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{1140., {417., 427.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{3.7099491236364794`*^9, 3.7099494812102327`*^9, 
+  3.709949511692281*^9, 3.709949724581568*^9, 
+  3.713049252979274*^9},ExpressionUUID->"13389629-b10a-40ba-9419-\
+4d6daceb42d2"]
+}, Open  ]]
+},
+WindowSize->{1371, 998},
+WindowMargins->{{25, Automatic}, {Automatic, 0}},
+Magnification:>1.8 Inherited,
+FrontEndVersion->"11.1 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 18, \
+2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 279, 7, 58, "Input", "ExpressionUUID" -> \
+"5d4f8766-c8d1-412a-914b-4a86b154da8f"],
+Cell[840, 29, 3684, 113, 412, "Input", "ExpressionUUID" -> \
+"febb6144-06df-4b9f-b05f-833eae56fec0"],
+Cell[CellGroupData[{
+Cell[4549, 146, 16048, 374, 1687, "Input", "ExpressionUUID" -> \
+"ba8ca90a-0f67-4d4b-9a99-1173a8d5ed35"],
+Cell[20600, 522, 9413, 170, 873, "Output", "ExpressionUUID" -> \
+"13389629-b10a-40ba-9419-4d6daceb42d2"]
+}, Open  ]]
+}
+]
+*)
+

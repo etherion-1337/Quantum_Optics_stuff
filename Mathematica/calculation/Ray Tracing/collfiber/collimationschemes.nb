@@ -1,0 +1,733 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     35188,        723]
+NotebookOptionsPosition[     34952,        710]
+NotebookOutlinePosition[     35287,        725]
+CellTagsIndexPosition[     35244,        722]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   GraphicsBox[{
+     {EdgeForm[{Hue[0.6831616693369955, 0.6, 0.6], Opacity[1.], 
+      AbsoluteThickness[1]}], FaceForm[{RGBColor[0.780392, 0.831373, 1], 
+      Opacity[1.]}], 
+      DiskBox[{1.1138888888888892`, 0.4652777777777777}, \
+{0.5833333333333333, 0.6069444444444446}]}, 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[
+      None], LineBox[{{1.366666666666667, 0.5}, {-0.061111111111111116`, 
+       0.49444444444444424`}}]}, 
+     {EdgeForm[{Hue[0.6831616693369955, 0.6, 0.6], Opacity[1.], 
+      AbsoluteThickness[1]}], FaceForm[{RGBColor[1, 1, 0], Opacity[1.]}], 
+      RectangleBox[{-0.013888888888888923`, 0.522222222222222}, \
+{0.18055555555555558`, 0.4611111111111107}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[1, 1, 0], Opacity[1.]}], 
+      ArrowBox[{{0.19722222222222222`, 0.6138888888888887}, {
+       0.19722222222222222`, 0.5277777777777775}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[1, 1, 0], Opacity[1.]}], 
+      ArrowBox[{{0.1944444444444445, 0.3833333333333333}, {0.1944444444444445,
+        0.45833333333333326`}}]}, 
+     {AbsoluteThickness[1], Dashing[{Small, Small}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{RGBColor[
+      0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+      LineBox[{{1.2887532641336992`, 0.5000936329588014}, {0.5194444444444446,
+        1.0112047440699126`}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{RGBColor[1, 0, 0], Opacity[1.]}], 
+      EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+      LineBox[{{0.18333333333333338`, 0.49693913658881783`}, {
+       0.7000000000000002, 0.8886058032554844}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{RGBColor[1, 0, 0], Opacity[1.]}], 
+      EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+      LineBox[{{0.702777777777778, 0.888888888888889}, {1.3333333333333335`, 
+       0.9944444444444444}}]}, 
+     {AbsoluteThickness[1], Dashing[{Small, Small}], StrokeForm[{RGBColor[
+      0, 0.666667, 0], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.463888888888889, 0.8916666666666663}, {1.3305555555555557`, 
+       0.8999999999999994}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[
+      None], LineBox[{{0.6250000000000001, 0.9444444444444448}, {
+       0.613888888888889, 0.9388888888888892}, {0.6111111111111113, 
+       0.9361111111111114}, {0.6055555555555557, 0.9305555555555558}, {
+       0.5972222222222223, 0.9194444444444447}, {0.5944444444444446, 
+       0.916666666666667}, {0.5944444444444446, 0.9138888888888892}, {
+       0.5916666666666668, 0.9111111111111114}, {0.588888888888889, 
+       0.9055555555555559}, {0.588888888888889, 0.9027777777777781}, {
+       0.5861111111111112, 0.9000000000000002}, {0.5861111111111112, 
+       0.8972222222222225}, {0.5861111111111112, 0.8916666666666669}, {
+       0.5861111111111112, 0.8888888888888892}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[
+      None], LineBox[{{0.6333333333333335, 0.836111111111111}, {
+       0.6472222222222224, 0.8333333333333333}, {0.6555555555555557, 
+       0.8305555555555555}, {0.6666666666666669, 0.8277777777777777}, {
+       0.6722222222222224, 0.825}, {0.6777777777777779, 0.825}, {
+       0.6916666666666669, 0.825}, {0.7083333333333335, 0.8222222222222222}, {
+       0.7111111111111112, 0.8222222222222222}, {0.7250000000000002, 
+       0.8222222222222222}, {0.7361111111111113, 0.8222222222222222}, {
+       0.7444444444444446, 0.8222222222222222}, {0.7583333333333335, 0.825}, {
+       0.7694444444444446, 0.8305555555555555}, {0.7777777777777779, 
+       0.8333333333333333}, {0.7805555555555558, 0.8333333333333333}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[
+      None], LineBox[{{0.9555555555555557, 0.9333333333333336}, {
+       0.9555555555555557, 0.9222222222222225}, {0.9555555555555557, 
+       0.9194444444444447}, {0.9555555555555557, 0.9138888888888892}, {
+       0.9555555555555557, 0.9111111111111114}, {0.952777777777778, 
+       0.9055555555555559}, {0.952777777777778, 0.9000000000000002}, {
+       0.9500000000000002, 0.9000000000000002}, {0.9500000000000002, 
+       0.8972222222222225}, {0.9472222222222224, 0.8972222222222225}, {
+       0.9444444444444446, 0.8944444444444447}}]}, InsetBox[
+      StyleBox[Cell["\[Alpha]",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->24,
+       Background->GrayLevel[1.]], {0.5277777777777779, 0.9138888888888894}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], 
+     StyleBox[InsetBox[Cell["\[Theta]2",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left], {1.063888888888889, 0.9083333333333332}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      FontSize->13,
+      Background->RGBColor[1., 1., 1., 0]], 
+     StyleBox[InsetBox[
+       StyleBox[Cell["\[Gamma]",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        FontSize->24], {0.6833333333333335, 0.7750000000000002}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      Background->RGBColor[1., 1., 1., 0]], 
+     StyleBox[InsetBox[
+       StyleBox[Cell["\[Omega]3",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        Background->GrayLevel[
+         1.]], {0.1638888888888889, 0.6333333333333333}, {Left, Baseline},
+       Alignment->{Left, Top}],
+      FontSize->18], 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0, 0.666667, 0], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.18333333333333335`, 0.9861111111111113}, {
+       0.18333333333333335`, -0.06388888888888877}}]}, 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0, 0.666667, 0], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.7035539933606718, 1.0222222222222226`}, {
+       0.7035539933606718, -0.027777777777777568`}}]}, 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0, 0.666667, 0], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.5333333333333334, 0.9833333333333334}, {
+       0.5333333333333334, -0.06666666666666654}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.39176840698741866`, 0.29166666666666674`}, {
+       0.5305555555555557, 0.29166666666666674`}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[1, 1, 0], Opacity[1.]}], 
+      ArrowBox[{{0.32508382416628034`, 0.2893927801683326}, {
+       0.18617133557703316`, 0.28573992856294134`}}]}, InsetBox[
+      StyleBox[Cell["d",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->18,
+       Background->GrayLevel[1.]], {0.3472222222222223, 0.3138888888888891}, {
+      Left, Top}, {0.06944444444444442, Automatic},
+      Alignment->{Left, Top}], 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.45277777777777783`, 0.13888888888888884`}, {
+       0.5361111111111112, 0.13888888888888884`}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.7984329232571765, 0.14166666666666683`}, {
+       0.7039884788127321, 0.14166666666666683`}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[
+      None], LineBox[{{0.26944444444444454`, 0.5555555555555557}, {
+       0.27777777777777785`, 0.5527777777777779}, {0.27777777777777785`, 
+       0.5472222222222224}, {0.2805555555555556, 0.5416666666666667}, {
+       0.2833333333333334, 0.5305555555555557}, {0.28611111111111115`, 
+       0.5194444444444446}, {0.28611111111111115`, 0.513888888888889}, {
+       0.28611111111111115`, 0.5111111111111112}, {0.28611111111111115`, 
+       0.5083333333333334}, {0.28611111111111115`, 0.5055555555555556}, {
+       0.28611111111111115`, 0.5000000000000001}, {0.28611111111111115`, 
+       0.49722222222222234`}}]}, 
+     StyleBox[InsetBox[
+       StyleBox[Cell["\[Theta]3",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        Background->GrayLevel[
+         1.]], {0.2972222222222223, 0.5166666666666668}, {Left, Baseline},
+       Alignment->{Left, Top}],
+      FontSize->18], 
+     StyleBox[InsetBox[
+       StyleBox[Cell["x3",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        FontSize->14], {0.577777777777778, 0.13888888888888906`}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      Background->RGBColor[1., 1., 1., 0]], 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.9444444444444446, 0.37777777777777777`}, {
+       1.2888888888888892`, 0.3833333333333333}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.8361111111111112, 0.3666666666666667}, {0.5305555555555557,
+        0.36111111111111116`}}]}, 
+     StyleBox[InsetBox[
+       StyleBox[Cell["R3",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        FontSize->14], {0.8666666666666668, 0.3555555555555556}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      Background->RGBColor[1., 1., 1., 0]], 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0, 0.666667, 0], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{1.2882054286272213`, 0.9448935754735408}, {
+       1.2882054286272213`, -0.10510642452645935`}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.8482718219097833, 0.7214487805711379}, {0.8459285295840657,
+        0.8901823894669401}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.8529584065612188, 0.6487990626830699}, {0.857644991212654, 
+       0.4988283538371413}}]}, 
+     StyleBox[InsetBox[
+       StyleBox[Cell["\[Omega]2",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        FontSize->14], {0.83186877562976, 0.6816051552431167}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      Background->RGBColor[1., 1., 1., 0]], 
+     {AbsoluteThickness[1], Dashing[{Small, Small}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[GrayLevel[0]], 
+      EdgeForm[None], 
+      LineBox[{{1.1599297012302288`, 0.9651435266549504}, {
+       1.1669595782073816`, 0.9651435266549504}}]}, 
+     StyleBox[InsetBox[
+       StyleBox[Cell["o",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        FontSize->14], {0.7639132981839486, 0.8573520796719394}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      Background->RGBColor[1., 1., 1., 0]], 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[GrayLevel[0]], EdgeForm[None], 
+      LineBox[{{0.8014059753954301, 0.9018746338605743}, {0.797656707674282, 
+       0.8888963994412152}, {0.7967193907439949, 0.8780812040917493}, {
+       0.7967193907439949, 0.8737551259519628}, {0.7967193907439949, 
+       0.8672660087422832}, {0.7967193907439949, 0.8607768915326036}, {
+       0.7967193907439949, 0.854287774322924}, {0.7967193907439949, 
+       0.843472578973458}, {0.7967193907439949, 0.8348204226938852}, {
+       0.7967193907439949, 0.8304943445540989}, {0.797656707674282, 
+       0.8261682664143124}, {0.7985940246045691, 0.8175161101347396}}]}},
+    ContentSelectable->True,
+    ImagePadding->{{0., 0.}, {0., 0.}},
+    ImageSize->{569., 427.},
+    PlotRange->{{0., 1.3333333333333335`}, {0., 1.}},
+    PlotRangePadding->Automatic], "\[IndentingNewLine]", 
+   GraphicsBox[{
+     {EdgeForm[{Hue[0.6831616693369955, 0.6, 0.6], Opacity[1.], 
+      AbsoluteThickness[1]}], FaceForm[{RGBColor[0.780392, 0.831373, 1], 
+      Opacity[1.]}], 
+      RectangleBox[{0.6192214111922142, 1.069343065693431}, \
+{1.6678832116788325`, 0.006082725060827243}]}, 
+     {EdgeForm[{Hue[0.6831616693369955, 0.6, 0.6], Opacity[1.], 
+      AbsoluteThickness[1]}], FaceForm[{GrayLevel[1], Opacity[1.]}], 
+      DiskBox[{0.21713083524687943`, 0.48709478788500715`}, \
+{0.5806789561231342, 0.7404803749267723}]}, 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[
+      None], LineBox[{{1.366666666666667, 0.5}, {-0.061111111111111116`, 
+       0.49444444444444424`}}]}, 
+     {EdgeForm[{Hue[0.6831616693369955, 0.6, 0.6], Opacity[1.], 
+      AbsoluteThickness[1]}], FaceForm[{RGBColor[1, 1, 0], Opacity[1.]}], 
+      RectangleBox[{-0.013888888888888923`, 0.522222222222222}, \
+{0.18055555555555558`, 0.4611111111111107}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[1, 1, 0], Opacity[1.]}], 
+      ArrowBox[{{0.19722222222222222`, 0.6138888888888887}, {
+       0.19722222222222222`, 0.5277777777777775}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[1, 1, 0], Opacity[1.]}], 
+      ArrowBox[{{0.1944444444444445, 0.3833333333333333}, {0.1944444444444445,
+        0.45833333333333326`}}]}, 
+     {AbsoluteThickness[1], Dashing[{Small, Small}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{RGBColor[
+      0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+      LineBox[{{0.9587166730261463, 1.1582061339886316`}, {
+       0.31074772481495266`, 0.4910232072668397}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{RGBColor[1, 0, 0], Opacity[1.]}], 
+      EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+      LineBox[{{0.18333333333333338`, 0.49693913658881783`}, {
+       0.7000000000000002, 0.8886058032554844}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{RGBColor[1, 0, 0], Opacity[1.]}], 
+      EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+      LineBox[{{0.702777777777778, 0.888888888888889}, {1.3333333333333335`, 
+       0.9944444444444444}}]}, 
+     {AbsoluteThickness[1], Dashing[{Small, Small}], StrokeForm[{RGBColor[
+      0, 0.666667, 0], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.463888888888889, 0.8916666666666663}, {1.3305555555555557`, 
+       0.8999999999999994}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[
+      None], LineBox[{{0.46602763193662594`, 0.5033027016535014}, {
+       0.4662131247318387, 0.5254864817922154}, {0.46471019659771257`, 
+       0.5317754929821729}, {0.4617043403294601, 0.5443535153620873}, {
+       0.45409695326122307`, 0.5647066812425168}, {0.45259402512709684`, 
+       0.5709956924324742}, {0.44949542246123814`, 0.5724818247430317}, {
+       0.447992494327112, 0.5787708359329891}, {0.4433909635271272, 
+       0.586545979433504}, {0.44029236086126855`, 0.5880321117440614}, {
+       0.4387894327271423, 0.5943211229340187}, {0.4356908300612837, 
+       0.5958072552445762}, {0.42949362472956615`, 0.5987795198656914}, {
+       0.4263950220637075, 0.6002656521762489}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[
+      None], LineBox[{{0.9555555555555557, 0.9333333333333336}, {
+       0.9555555555555557, 0.9222222222222225}, {0.9555555555555557, 
+       0.9194444444444447}, {0.9555555555555557, 0.9138888888888892}, {
+       0.9555555555555557, 0.9111111111111114}, {0.952777777777778, 
+       0.9055555555555559}, {0.952777777777778, 0.9000000000000002}, {
+       0.9500000000000002, 0.9000000000000002}, {0.9500000000000002, 
+       0.8972222222222225}, {0.9472222222222224, 0.8972222222222225}, {
+       0.9444444444444446, 0.8944444444444447}}]}, InsetBox[
+      StyleBox[Cell["\[Alpha]",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->24,
+       Background->GrayLevel[1.]], {0.3988240064882402, 0.5099959448499596}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], 
+     StyleBox[InsetBox[Cell["\[Theta]2",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left], {1.063888888888889, 0.9083333333333332}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      FontSize->13,
+      Background->RGBColor[1., 1., 1., 0]], 
+     StyleBox[InsetBox[
+       StyleBox[Cell["\[Gamma]",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        FontSize->24], {0.5373479318734794, 0.7506690997566908}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      Background->RGBColor[1., 1., 1., 0]], 
+     StyleBox[InsetBox[
+       StyleBox[Cell["\[Omega]3",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        Background->GrayLevel[
+         1.]], {0.1638888888888889, 0.6333333333333333}, {Left, Baseline},
+       Alignment->{Left, Top}],
+      FontSize->18], 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0, 0.666667, 0], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.18333333333333335`, 0.9861111111111113}, {
+       0.18333333333333335`, -0.06388888888888877}}]}, 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0, 0.666667, 0], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.7984445043095769, 0.9954582319545826}, {
+       0.7984445043095769, -0.05454176804541755}}]}, 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0, 0.666667, 0], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.6987834549878347, 1.0052311435523107`}, {0.6987834549878347,
+        -0.04476885644768924}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.5494960887006985, 0.26733576642335755`}, {
+       0.7968582308031404, 0.26733576642335755`}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[1, 1, 0], Opacity[1.]}], 
+      ArrowBox[{{0.47077959720328477`, 0.2626287899006926}, {
+       0.17949761666096548`, 0.25897593829530136`}}]}, InsetBox[
+      StyleBox[Cell["d",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->18,
+       Background->GrayLevel[1.]], {0.4883414436334146, 0.2871248986212491}, {
+      Left, Top}, {0.06944444444444442, Automatic},
+      Alignment->{Left, Top}], 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.6500347590580068, 0.15105433901054355`}, {
+       0.6923311402315793, 0.15105433901054355`}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.8662101030345243, 0.15626520681265244`}, {
+       0.8060897180705023, 0.15626520681265244`}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[
+      None], LineBox[{{0.26944444444444454`, 0.5555555555555557}, {
+       0.27777777777777785`, 0.5527777777777779}, {0.27777777777777785`, 
+       0.5472222222222224}, {0.2805555555555556, 0.5416666666666667}, {
+       0.2833333333333334, 0.5305555555555557}, {0.28611111111111115`, 
+       0.5194444444444446}, {0.28611111111111115`, 0.513888888888889}, {
+       0.28611111111111115`, 0.5111111111111112}, {0.28611111111111115`, 
+       0.5083333333333334}, {0.28611111111111115`, 0.5055555555555556}, {
+       0.28611111111111115`, 0.5000000000000001}, {0.28611111111111115`, 
+       0.49722222222222234`}}]}, 
+     StyleBox[InsetBox[
+       StyleBox[Cell["\[Theta]3",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        Background->GrayLevel[1.]], {0.280190592051906, 0.5434306569343064}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      FontSize->18], 
+     StyleBox[InsetBox[
+       StyleBox[Cell["x3",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        FontSize->14], {0.7359286293592865, 0.14132197891322007`}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      Background->RGBColor[1., 1., 1., 0]], 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.6160929063938753, 0.41184103811840966`}, {
+       0.7950705977422333, 0.4173965936739652}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.48349320561254816`, 0.4201946472019453}, {
+       0.3190654867540763, 0.4146390916463898}}]}, 
+     StyleBox[InsetBox[
+       StyleBox[Cell["R3",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        FontSize->14], {0.518734793187348, 0.39935117599351155`}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      Background->RGBColor[1., 1., 1., 0]], 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0, 0.666667, 0], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.3149694188948611, 1.0154531861791372`}, {
+       0.3149694188948611, -0.034546813820863}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.8482718219097833, 0.7214487805711379}, {0.8459285295840657,
+        0.8901823894669401}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Arrowheads[{{0.014723125024327186`, 1, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.]}], EdgeForm[{Hue[
+      0.6831616693369955, 0.6, 0.6], Opacity[1.], AbsoluteThickness[1]}], 
+      FaceForm[{RGBColor[0.780392, 0.831373, 1], Opacity[1.]}], 
+      ArrowBox[{{0.8529584065612188, 0.6487990626830699}, {0.857644991212654, 
+       0.4988283538371413}}]}, 
+     StyleBox[InsetBox[
+       StyleBox[Cell["\[Omega]2",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        FontSize->14], {0.83186877562976, 0.6816051552431167}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      Background->RGBColor[1., 1., 1., 0]], 
+     {AbsoluteThickness[1], StrokeForm[{Hue[0.6831616693369955, 0.6, 0.6], 
+      Opacity[1.]}], EdgeForm[GrayLevel[0]], EdgeForm[None], 
+      LineBox[{{0.7518248175182484, 0.9476885644768858}, {0.7639902676399029, 
+       0.9476885644768858}, {0.7712895377128955, 0.9476885644768858}, {
+       0.7761557177615573, 0.9403892944038931}, {0.7810218978102191, 
+       0.9355231143552313}, {0.7810218978102191, 0.9306569343065695}, {
+       0.7858880778588809, 0.9233576642335768}, {0.7858880778588809, 
+       0.918491484184915}, {0.7883211678832118, 0.9160583941605841}, {
+       0.7883211678832118, 0.9136253041362532}, {0.7907542579075427, 
+       0.9038929440389296}, {0.7931873479318736, 0.8990267639902678}, {
+       0.7931873479318736, 0.8965936739659368}}]}, InsetBox[
+      StyleBox[Cell["o",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->14,
+       Background->GrayLevel[1.]], {0.8126520681265208, 1.062043795620438}, {
+      Left, Top}, {0.4136253041362532, Automatic},
+      Alignment->{Left, Top}], 
+     StyleBox[InsetBox[
+       StyleBox[Cell["o",
+         GeneratedCell->False,
+         CellAutoOverwrite->False,
+         CellBaseline->Baseline,
+         TextAlignment->Left],
+        FontSize->14], {0.8029197080291972, 0.9184914841849144}, {
+       Left, Baseline},
+       Alignment->{Left, Top}],
+      Background->RGBColor[1., 1., 1., 0]]},
+    ContentSelectable->True,
+    ImagePadding->{{0., 0.}, {0., 0.}},
+    ImageSize->{548., 412.},
+    PlotRange->{{0., 1.3333333333333335`}, {0., 1.}},
+    PlotRangePadding->Automatic]}]}]], "Input",
+ CellChangeTimes->{{3.620964314334508*^9, 3.620964466709281*^9}}]
+},
+WindowSize->{1366, 713},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (February 7, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 34391, 688, 926, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
+

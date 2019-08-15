@@ -1,0 +1,2811 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    103218,       2802]
+NotebookOptionsPosition[     99846,       2680]
+NotebookOutlinePosition[    100212,       2696]
+CellTagsIndexPosition[    100169,       2693]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+This notebook shows how to estimate the visibility and CHSH based on the \
+state which described by three parameters:
+p-> puriy of the state,
+\[Alpha]->the relative phase difference between HH and VV
+\[Beta]-> imbalance of HH and VV\
+\>", "Section",
+ CellChangeTimes->{{3.731288380969949*^9, 3.731288457446589*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", "\[Alpha]", "]"}]], "Input",
+ CellChangeTimes->{{3.7147731044523025`*^9, 3.7147731097443027`*^9}, {
+  3.7147734644713025`*^9, 3.7147734648123026`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"rot", "[", "\[Theta]_", "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Cos", "[", "\[Theta]", "]"}], ",", 
+      RowBox[{"-", 
+       RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Sin", "[", "\[Theta]", "]"}], ",", 
+      RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "}"}]}], 
+   "}"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"i", "=", 
+   RowBox[{"rot", "[", "0", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"degtorad", "[", "\[Theta]_", "]"}], ":=", 
+  RowBox[{"\[Theta]", "*", 
+   RowBox[{"\[Pi]", "/", "180"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"radtodeg", "[", "\[Theta]_", "]"}], ":=", 
+  RowBox[{"\[Theta]", "*", 
+   RowBox[{"180", "/", "\[Pi]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"phi", "=", 
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{"1", "-", "p"}], "4"], 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "1", ",", "0", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "1", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}]}], "}"}]}], "+", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"(", "p", ")"}], "2"], 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", "1", "}"}], ",", 
+        RowBox[{"{", "0", "}"}], ",", 
+        RowBox[{"{", "0", "}"}], ",", 
+        RowBox[{"{", "1", "}"}]}], "}"}], ".", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", "1", "}"}], ",", 
+         RowBox[{"{", "0", "}"}], ",", 
+         RowBox[{"{", "0", "}"}], ",", 
+         RowBox[{"{", "1", "}"}]}], "}"}], "]"}]}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"max", "=", 
+   RowBox[{
+    FractionBox["1", 
+     SqrtBox["2"]], 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "0", ",", "0", ",", "1"}], "}"}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"en", "=", 
+   RowBox[{
+    RowBox[{"Transpose", "[", "max", "]"}], ".", "max"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"max\[Alpha]", "=", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "0", ",", "0", ",", 
+      RowBox[{"\[Alpha]", "+", 
+       RowBox[{"\[ImaginaryI]", " ", 
+        SqrtBox[
+         RowBox[{"1", "-", 
+          RowBox[{"\[Alpha]", "^", "2"}]}]]}]}]}], "}"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"en\[Alpha]", "=", 
+   RowBox[{
+    RowBox[{"Transpose", "[", "max\[Alpha]", "]"}], ".", "max\[Alpha]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"enb", "=", 
+   RowBox[{"0.5", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "0", ",", "0", ",", 
+        RowBox[{"Exp", "[", 
+         RowBox[{
+          RowBox[{"-", "\[ImaginaryI]"}], " ", "\[Alpha]"}], "]"}]}], "}"}], 
+      ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Exp", "[", 
+         RowBox[{"\[ImaginaryI]", " ", "\[Alpha]"}], "]"}], ",", "0", ",", 
+        "0", ",", "1"}], "}"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"enc", "=", 
+   RowBox[{
+    RowBox[{"Transpose", "[", 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       RowBox[{
+        SqrtBox["\[Beta]"], ",", "0", ",", "0", ",", 
+        SqrtBox[
+         RowBox[{"(", 
+          RowBox[{"1", "-", "\[Beta]"}], " ", ")"}]]}], "}"}], "}"}], "]"}], 
+    ".", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{
+       SqrtBox["\[Beta]"], ",", "0", ",", "0", ",", 
+       SqrtBox[
+        RowBox[{"(", 
+         RowBox[{"1", "-", "\[Beta]"}], " ", ")"}]]}], "}"}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ent", "=", 
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{"1", "-", "p"}], "2"], 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}]}], "}"}]}], "+", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"(", "p", ")"}], "2"], 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", "1", "}"}], ",", 
+        RowBox[{"{", "0", "}"}], ",", 
+        RowBox[{"{", "0", "}"}], ",", 
+        RowBox[{"{", "1", "}"}]}], "}"}], ".", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", "1", "}"}], ",", 
+         RowBox[{"{", "0", "}"}], ",", 
+         RowBox[{"{", "0", "}"}], ",", 
+         RowBox[{"{", "1", "}"}]}], "}"}], "]"}]}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"q", "=", 
+   RowBox[{"PauliMatrix", "[", "1", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"r", "=", 
+   RowBox[{"PauliMatrix", "[", "3", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s", "=", 
+   RowBox[{
+    FractionBox["1", 
+     SqrtBox["2"]], 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"PauliMatrix", "[", "1", "]"}], "+", 
+      RowBox[{"PauliMatrix", "[", "3", "]"}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"t", "=", 
+   RowBox[{
+    FractionBox["1", 
+     SqrtBox["2"]], 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"PauliMatrix", "[", "1", "]"}], "-", 
+      RowBox[{"PauliMatrix", "[", "3", "]"}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"KroneckerProduct", "[", 
+   RowBox[{"q", ",", "s"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"KroneckerProduct", "[", 
+   RowBox[{"r", ",", "s"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"KroneckerProduct", "[", 
+   RowBox[{"q", ",", "t"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"KroneckerProduct", "[", 
+   RowBox[{"r", ",", "t"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vismeasure", "=", 
+   RowBox[{"KroneckerProduct", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"rot", "[", 
+       RowBox[{"degtorad", "[", 
+        RowBox[{"-", "45"}], "]"}], "]"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", "1", "}"}], ",", 
+        RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+      RowBox[{"rot", "[", 
+       RowBox[{"degtorad", "[", "45", "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{"rot", "[", 
+       RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", "1", "}"}], ",", 
+        RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+      RowBox[{"rot", "[", 
+       RowBox[{"degtorad", "[", 
+        RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.698382529340269*^9, 3.698382621589493*^9}, {
+   3.701993021553343*^9, 3.7019930217053585`*^9}, {3.702870125391774*^9, 
+   3.702870125648774*^9}, {3.7028711330067744`*^9, 3.7028711428227744`*^9}, {
+   3.702871179556774*^9, 3.702871186636774*^9}, {3.7028725683507743`*^9, 
+   3.7028725699257746`*^9}, {3.7028751180227747`*^9, 3.7028751187507744`*^9}, 
+   3.702876762063774*^9, {3.703548232994708*^9, 3.703548234954904*^9}, 
+   3.7035482649639044`*^9, {3.7035496610010366`*^9, 3.7035496637594852`*^9}, {
+   3.7035598859763727`*^9, 3.7035599096553726`*^9}, {3.7153015911227913`*^9, 
+   3.7153015924417915`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+The CHSH and visibility when changing purity\
+\>", "Section",
+ CellChangeTimes->{{3.7312883460016117`*^9, 3.73128837352917*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Manipulate", "[", 
+   RowBox[{
+    RowBox[{"Plot", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "0", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "0", "]"}], "]"}]}], ",", 
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+           "phi"}], "]"}], "/.", 
+         RowBox[{"p", "\[Rule]", "a"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "45", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "45"}], "]"}], "]"}]}], ",", 
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+           "phi"}], "]"}], "/.", 
+         RowBox[{"p", "\[Rule]", "a"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "20", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "20"}], "]"}], "]"}]}], ",", 
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+           "phi"}], "]"}], "/.", 
+         RowBox[{"p", "\[Rule]", "a"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "90", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "90"}], "]"}], "]"}]}], ",", 
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+           "phi"}], "]"}], "/.", 
+         RowBox[{"p", "\[Rule]", "a"}]}]}], "\[IndentingNewLine]", "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\[Theta]", ",", "0", ",", "360"}], "}"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0.5"}], "}"}]}], ",", 
+      RowBox[{"PlotLegends", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"\"\<0\>\"", ",", "\"\<45\>\"", ",", "\"\<90\>\""}], 
+        "}"}]}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a", ",", "1", ",", "\"\<deg of polarisation\>\""}], "}"}], 
+      ",", "0", ",", "1"}], "}"}]}], "]"}], 
+  RowBox[{"Manipulate", "[", 
+   RowBox[{
+    RowBox[{"Plot", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Abs", "[", 
+         RowBox[{
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{"q", ",", "s"}], "]"}], ".", "phi"}], "]"}], "+", 
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{"r", ",", "s"}], "]"}], ".", "phi"}], "]"}], "+", 
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{"q", ",", "t"}], "]"}], ".", "phi"}], "]"}], "-", 
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{"r", ",", "t"}], "]"}], ".", "phi"}], "]"}]}], "]"}], 
+        "\[IndentingNewLine]", ",", "p"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"p", ",", "0", ",", "1"}], "}"}], ",", 
+      RowBox[{"GridLines", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", "a", "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "a"}], "}"}]}], "}"}]}], ",", 
+      RowBox[{"PlotLegends", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"\"\<CHSH\>\"", ",", "\"\<visibility\>\""}], "}"}]}]}], "]"}],
+     ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a", ",", 
+        RowBox[{"1", "-", 
+         RowBox[{"1", "/", 
+          SqrtBox["2"]}]}], ",", "\"\<deg of polarisation\>\""}], "}"}], ",", 
+      "0", ",", "1"}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.698383655110447*^9, 3.698383665659447*^9}, {
+   3.698384501508447*^9, 3.698384532202447*^9}, {3.6983846155904474`*^9, 
+   3.6983846465244474`*^9}, {3.6983846999934473`*^9, 
+   3.6983847030574474`*^9}, {3.7028661298817744`*^9, 
+   3.7028661468807745`*^9}, {3.7028661851377745`*^9, 3.7028663028957744`*^9}, 
+   3.7028682533227744`*^9, {3.7028682882157745`*^9, 3.702868288511774*^9}, {
+   3.7028683198627744`*^9, 3.7028683279897747`*^9}, {3.7028684456147747`*^9, 
+   3.7028684858307743`*^9}, {3.7028686725787745`*^9, 
+   3.7028687049447746`*^9}, {3.7028687409987745`*^9, 
+   3.7028687761007743`*^9}, {3.7028688072827744`*^9, 
+   3.7028688141947746`*^9}, {3.702874406167774*^9, 3.7028744398217745`*^9}, {
+   3.703549669895258*^9, 3.7035497171343727`*^9}, {3.714352387248561*^9, 
+   3.7143523936321993`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  TagBox[
+   StyleBox[
+    DynamicModuleBox[{$CellContext`a$$ = 0.7030000000000001, Typeset`show$$ = 
+     True, Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+     Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+     "\"untitled\"", Typeset`specs$$ = {{{
+        Hold[$CellContext`a$$], 1 - 2^Rational[-1, 2], "deg of polarisation"},
+        0, 1}}, Typeset`size$$ = {729., {177., 189.}}, Typeset`update$$ = 0, 
+     Typeset`initDone$$, Typeset`skipInitDone$$ = True, $CellContext`a$643$$ =
+      0}, 
+     DynamicBox[Manipulate`ManipulateBoxes[
+      1, StandardForm, 
+       "Variables" :> {$CellContext`a$$ = 1 - 2^Rational[-1, 2]}, 
+       "ControllerVariables" :> {
+         Hold[$CellContext`a$$, $CellContext`a$643$$, 0]}, 
+       "OtherVariables" :> {
+        Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+         Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+         Typeset`specs$$, Typeset`size$$, Typeset`update$$, 
+         Typeset`initDone$$, Typeset`skipInitDone$$}, "Body" :> Plot[{
+          Abs[Tr[
+             Dot[
+              
+              KroneckerProduct[$CellContext`q, $CellContext`s], \
+$CellContext`phi]] + Tr[
+             Dot[
+              
+              KroneckerProduct[$CellContext`r, $CellContext`s], \
+$CellContext`phi]] + Tr[
+             Dot[
+              
+              KroneckerProduct[$CellContext`q, $CellContext`t], \
+$CellContext`phi]] - Tr[
+            Dot[
+             
+             KroneckerProduct[$CellContext`r, $CellContext`t], \
+$CellContext`phi]]], $CellContext`p}, {$CellContext`p, 0, 1}, 
+         GridLines -> {{$CellContext`a$$}, {2, $CellContext`a$$}}, 
+         PlotLegends -> {"CHSH", "visibility"}], 
+       "Specifications" :> {{{$CellContext`a$$, 1 - 2^Rational[-1, 2], 
+           "deg of polarisation"}, 0, 1}}, "Options" :> {}, 
+       "DefaultOptions" :> {}],
+      ImageSizeCache->{799., {246., 256.}},
+      SingleEvaluation->True],
+     Deinitialization:>None,
+     DynamicModuleValues:>{},
+     SynchronousInitialization->True,
+     UnsavedVariables:>{Typeset`initDone$$},
+     UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+    Deployed->True,
+    StripOnInput->False],
+   Manipulate`InterpretManipulate[1]], " ", 
+  TagBox[
+   StyleBox[
+    DynamicModuleBox[{$CellContext`a$$ = 0.9400000000000001, Typeset`show$$ = 
+     True, Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+     Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+     "\"untitled\"", Typeset`specs$$ = {{{
+        Hold[$CellContext`a$$], 1, "deg of polarisation"}, 0, 1}}, 
+     Typeset`size$$ = {673., {187., 198.}}, Typeset`update$$ = 0, 
+     Typeset`initDone$$, Typeset`skipInitDone$$ = True, $CellContext`a$666$$ =
+      0}, 
+     DynamicBox[Manipulate`ManipulateBoxes[
+      1, StandardForm, "Variables" :> {$CellContext`a$$ = 1}, 
+       "ControllerVariables" :> {
+         Hold[$CellContext`a$$, $CellContext`a$666$$, 0]}, 
+       "OtherVariables" :> {
+        Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+         Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+         Typeset`specs$$, Typeset`size$$, Typeset`update$$, 
+         Typeset`initDone$$, Typeset`skipInitDone$$}, "Body" :> Plot[{
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[0]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[0]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`phi]], $CellContext`p -> $CellContext`a$$], 
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[45]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-45]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`phi]], $CellContext`p -> $CellContext`a$$], 
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[20]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-20]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`phi]], $CellContext`p -> $CellContext`a$$], 
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[90]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-90]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`phi]], $CellContext`p -> $CellContext`a$$]}, {$CellContext`\
+\[Theta], 0, 360}, PlotRange -> {0, 0.5}, PlotLegends -> {"0", "45", "90"}], 
+       "Specifications" :> {{{$CellContext`a$$, 1, "deg of polarisation"}, 0, 
+          1}}, "Options" :> {}, "DefaultOptions" :> {}],
+      ImageSizeCache->{743., {255., 265.}},
+      SingleEvaluation->True],
+     Deinitialization:>None,
+     DynamicModuleValues:>{},
+     SynchronousInitialization->True,
+     UnsavedVariables:>{Typeset`initDone$$},
+     UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+    Deployed->True,
+    StripOnInput->False],
+   Manipulate`InterpretManipulate[1]]}]], "Output",
+ CellChangeTimes->{
+  3.698383666865447*^9, 3.698383954221447*^9, {3.6983844168224473`*^9, 
+   3.698384425258447*^9}, 3.698384505431447*^9, {3.698384630804447*^9, 
+   3.6983846549514475`*^9}, 3.6983847037864475`*^9, 3.7023528385251856`*^9, 
+   3.702866147365774*^9, {3.702866194556774*^9, 3.7028662271137743`*^9}, {
+   3.7028662830857744`*^9, 3.702866304089774*^9}, 3.7028682562127743`*^9, 
+   3.7028682902257743`*^9, {3.7028683209207745`*^9, 3.7028683284297743`*^9}, {
+   3.702868447542774*^9, 3.7028684869407744`*^9}, {3.7028686902367744`*^9, 
+   3.7028687064237747`*^9}, {3.7028687625177746`*^9, 
+   3.7028687776027746`*^9}, {3.7028688106717744`*^9, 3.702868815023774*^9}, 
+   3.7028744403027744`*^9, 3.703548173921801*^9, {3.703549677838669*^9, 
+   3.7035497184333725`*^9}, 3.7051100488148623`*^9, 3.705716229574419*^9, 
+   3.7057209059628925`*^9, 3.7058135965744925`*^9, {3.705897323087375*^9, 
+   3.7058973427635007`*^9}, 3.706579219227669*^9, 3.7076097014369364`*^9, 
+   3.7095326184759207`*^9, 3.709853784258897*^9, 3.7104940082514467`*^9, {
+   3.7143523291577525`*^9, 3.7143523473175683`*^9}, {3.7143523776836042`*^9, 
+   3.7143523959774337`*^9}, 3.71546562788314*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+The CHSH and visibility when changing imbalance\
+\>", "Section",
+ CellChangeTimes->{{3.7312884798377037`*^9, 3.731288494917088*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Tr", "[", 
+         RowBox[{
+          RowBox[{"KroneckerProduct", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", "0", "]"}], "]"}], ".", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", "1", "}"}], ",", 
+               RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+             RowBox[{"{", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", "0", "]"}], "]"}]}], ",", 
+            RowBox[{
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", "1", "}"}], ",", 
+               RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+             RowBox[{"{", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", 
+               RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+          "enc"}], "]"}], "/.", 
+        RowBox[{"\[Beta]", "\[Rule]", "a"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Tr", "[", 
+         RowBox[{
+          RowBox[{"KroneckerProduct", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", "45", "]"}], "]"}], ".", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", "1", "}"}], ",", 
+               RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+             RowBox[{"{", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", 
+               RowBox[{"-", "45"}], "]"}], "]"}]}], ",", 
+            RowBox[{
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", "1", "}"}], ",", 
+               RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+             RowBox[{"{", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", 
+               RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+          "enc"}], "]"}], "/.", 
+        RowBox[{"\[Beta]", "\[Rule]", "a"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Tr", "[", 
+         RowBox[{
+          RowBox[{"KroneckerProduct", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", "90", "]"}], "]"}], ".", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", "1", "}"}], ",", 
+               RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+             RowBox[{"{", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", 
+               RowBox[{"-", "90"}], "]"}], "]"}]}], ",", 
+            RowBox[{
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", "1", "}"}], ",", 
+               RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+             RowBox[{"{", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", 
+               RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+          "enc"}], "]"}], "/.", 
+        RowBox[{"\[Beta]", "\[Rule]", "a"}]}], ",", 
+       RowBox[{
+        RowBox[{"Tr", "[", 
+         RowBox[{
+          RowBox[{"KroneckerProduct", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", 
+               RowBox[{"-", "45"}], "]"}], "]"}], ".", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", "1", "}"}], ",", 
+               RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+             RowBox[{"{", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", "45", "]"}], "]"}]}], ",", 
+            RowBox[{
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", "1", "}"}], ",", 
+               RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+             RowBox[{"{", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+             RowBox[{"rot", "[", 
+              RowBox[{"degtorad", "[", 
+               RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+          "enc"}], "]"}], "/.", 
+        RowBox[{"\[Beta]", "\[Rule]", "a"}]}]}], "\[IndentingNewLine]", "}"}],
+      ",", 
+     RowBox[{"{", 
+      RowBox[{"\[Theta]", ",", "0", ",", "360"}], "}"}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "1"}], "}"}]}], ",", 
+     RowBox[{"PlotLegends", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<0\>\"", ",", "\"\<45\>\"", ",", "\"\<90\>\"", ",", 
+        "\"\<-45\>\""}], "}"}]}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a", ",", "0.5", ",", "\"\<imbalance\>\""}], "}"}], ",", "0", 
+     ",", "1"}], "}"}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Abs", "[", 
+        RowBox[{
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{"q", ",", "s"}], "]"}], ".", "enc"}], "]"}], "+", 
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{"r", ",", "s"}], "]"}], ".", "enc"}], "]"}], "+", 
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{"q", ",", "t"}], "]"}], ".", "enc"}], "]"}], "-", 
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{"r", ",", "t"}], "]"}], ".", "enc"}], "]"}]}], "]"}], ",",
+        "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\[Beta]", ",", "0", ",", "1"}], "}"}], ",", 
+     RowBox[{"GridLines", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", "a", "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", 
+          RowBox[{"2", 
+           SqrtBox["2"]}], ",", "a"}], "}"}]}], "}"}]}], ",", 
+     RowBox[{"PlotLegends", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\"\<CHSH\>\"", ",", "\"\<visibility\>\""}], "}"}]}]}], "]"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a", ",", 
+       RowBox[{"1", "-", 
+        RowBox[{"1", "/", 
+         SqrtBox["2"]}]}], ",", "\"\<imbalance\>\""}], "}"}], ",", "0", ",", 
+     "1"}], "}"}]}], "]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.7028742448477745`*^9, 3.7028742750787745`*^9}, {
+   3.702874347681774*^9, 3.7028743666567745`*^9}, 3.7028744706437745`*^9, {
+   3.7028745032577744`*^9, 3.7028745093157744`*^9}, {3.7028745500947742`*^9, 
+   3.7028746295627747`*^9}, {3.7028746803337746`*^9, 
+   3.7028746873837748`*^9}, {3.7028749177307744`*^9, 
+   3.7028749530647745`*^9}, {3.7028758588297744`*^9, 
+   3.7028758590617743`*^9}, {3.7143524195457907`*^9, 
+   3.7143524592437596`*^9}, {3.7147732857873025`*^9, 
+   3.7147732864583025`*^9}, {3.714798195162163*^9, 3.7147982166533117`*^9}, {
+   3.7180716702672663`*^9, 3.718071725494769*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a$$ = 0.483, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`a$$], 0.5, "imbalance"}, 0, 1}}, Typeset`size$$ = {
+    686., {187., 198.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`a$3055$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`a$$ = 0.5}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`a$$, $CellContext`a$3055$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Plot[{
+         ReplaceAll[
+          Tr[
+           Dot[
+            KroneckerProduct[
+             Dot[
+              $CellContext`rot[
+               $CellContext`degtorad[0]], {{1}, {0}}, {{1, 0}}, 
+              $CellContext`rot[
+               $CellContext`degtorad[0]]], 
+             Dot[
+              $CellContext`rot[
+               $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{1,
+               0}}, 
+              $CellContext`rot[
+               $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enc]], $CellContext`\[Beta] -> $CellContext`a$$], 
+         ReplaceAll[
+          Tr[
+           Dot[
+            KroneckerProduct[
+             Dot[
+              $CellContext`rot[
+               $CellContext`degtorad[45]], {{1}, {0}}, {{1, 0}}, 
+              $CellContext`rot[
+               $CellContext`degtorad[-45]]], 
+             Dot[
+              $CellContext`rot[
+               $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{1,
+               0}}, 
+              $CellContext`rot[
+               $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enc]], $CellContext`\[Beta] -> $CellContext`a$$], 
+         ReplaceAll[
+          Tr[
+           Dot[
+            KroneckerProduct[
+             Dot[
+              $CellContext`rot[
+               $CellContext`degtorad[90]], {{1}, {0}}, {{1, 0}}, 
+              $CellContext`rot[
+               $CellContext`degtorad[-90]]], 
+             Dot[
+              $CellContext`rot[
+               $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{1,
+               0}}, 
+              $CellContext`rot[
+               $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enc]], $CellContext`\[Beta] -> $CellContext`a$$], 
+         ReplaceAll[
+          Tr[
+           Dot[
+            KroneckerProduct[
+             Dot[
+              $CellContext`rot[
+               $CellContext`degtorad[-45]], {{1}, {0}}, {{1, 0}}, 
+              $CellContext`rot[
+               $CellContext`degtorad[45]]], 
+             Dot[
+              $CellContext`rot[
+               $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{1,
+               0}}, 
+              $CellContext`rot[
+               $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enc]], $CellContext`\[Beta] -> $CellContext`a$$]}, \
+{$CellContext`\[Theta], 0, 360}, PlotRange -> {0, 1}, 
+        PlotLegends -> {"0", "45", "90", "-45"}], 
+      "Specifications" :> {{{$CellContext`a$$, 0.5, "imbalance"}, 0, 1}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{756., {255., 265.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.7028742638117743`*^9, 3.7028742758897743`*^9}, {
+   3.7028743360517745`*^9, 3.7028743678777742`*^9}, 3.702874471964774*^9, 
+   3.7028745235627747`*^9, {3.7028745854567747`*^9, 3.7028746315537744`*^9}, {
+   3.7028749258807745`*^9, 3.7028749535887747`*^9}, 3.7028758603167744`*^9, 
+   3.703548176139023*^9, 3.705110049330892*^9, 3.7057162299924426`*^9, 
+   3.705720907082957*^9, 3.7058135970205183`*^9, {3.705897323905422*^9, 
+   3.7058973431785245`*^9}, 3.7065792196636257`*^9, 3.7076097018639364`*^9, 
+   3.7095326190769806`*^9, 3.709853784731944*^9, 3.710494008675334*^9, {
+   3.714352329684805*^9, 3.7143523479296293`*^9}, {3.7143524409749327`*^9, 
+   3.7143524634711823`*^9}, {3.714773257087302*^9, 3.714773287469302*^9}, 
+   3.71479819882953*^9, 3.715465796714795*^9, 3.718071670989139*^9, {
+   3.718071702076682*^9, 3.7180717259167624`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a$$ = 0.05, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`a$$], 1 - 2^Rational[-1, 2], "imbalance"}, 0, 1}}, 
+    Typeset`size$$ = {729., {177., 189.}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = True, $CellContext`a$3079$$ =
+     0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`a$$ = 1 - 2^Rational[-1, 2]}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`a$$, $CellContext`a$3079$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Plot[{
+         Abs[Tr[
+            Dot[
+             
+             KroneckerProduct[$CellContext`q, $CellContext`s], \
+$CellContext`enc]] + Tr[
+            Dot[
+             
+             KroneckerProduct[$CellContext`r, $CellContext`s], \
+$CellContext`enc]] + Tr[
+            Dot[
+             
+             KroneckerProduct[$CellContext`q, $CellContext`t], \
+$CellContext`enc]] - Tr[
+           Dot[
+            
+            KroneckerProduct[$CellContext`r, $CellContext`t], \
+$CellContext`enc]]], 1}, {$CellContext`\[Beta], 0, 1}, 
+        GridLines -> {{$CellContext`a$$}, {
+          2, 2 2^Rational[1, 2], $CellContext`a$$}}, 
+        PlotLegends -> {"CHSH", "visibility"}], 
+      "Specifications" :> {{{$CellContext`a$$, 1 - 2^Rational[-1, 2], 
+          "imbalance"}, 0, 1}}, "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{799., {246., 256.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.7028742638117743`*^9, 3.7028742758897743`*^9}, {
+   3.7028743360517745`*^9, 3.7028743678777742`*^9}, 3.702874471964774*^9, 
+   3.7028745235627747`*^9, {3.7028745854567747`*^9, 3.7028746315537744`*^9}, {
+   3.7028749258807745`*^9, 3.7028749535887747`*^9}, 3.7028758603167744`*^9, 
+   3.703548176139023*^9, 3.705110049330892*^9, 3.7057162299924426`*^9, 
+   3.705720907082957*^9, 3.7058135970205183`*^9, {3.705897323905422*^9, 
+   3.7058973431785245`*^9}, 3.7065792196636257`*^9, 3.7076097018639364`*^9, 
+   3.7095326190769806`*^9, 3.709853784731944*^9, 3.710494008675334*^9, {
+   3.714352329684805*^9, 3.7143523479296293`*^9}, {3.7143524409749327`*^9, 
+   3.7143524634711823`*^9}, {3.714773257087302*^9, 3.714773287469302*^9}, 
+   3.71479819882953*^9, 3.715465796714795*^9, 3.718071670989139*^9, {
+   3.718071702076682*^9, 3.718071726080216*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+The CHSH and visibility when changing relative phase\
+\>", "Section",
+ CellChangeTimes->{{3.731288505527136*^9, 3.731288510597308*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "0", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "0", "]"}], "]"}]}], ",", 
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+           "enb"}], "]"}], "/.", 
+         RowBox[{"\[Alpha]", "\[Rule]", 
+          RowBox[{"degtorad", "[", " ", "a", "]"}]}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "45", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "45"}], "]"}], "]"}]}], ",", 
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+           "enb"}], "]"}], "/.", 
+         RowBox[{"\[Alpha]", "\[Rule]", 
+          RowBox[{"degtorad", "[", " ", "a", "]"}]}]}], ",", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Tr", "[", 
+          RowBox[{
+           RowBox[{"KroneckerProduct", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "90", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "90"}], "]"}], "]"}]}], ",", 
+             RowBox[{
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", "1", "}"}], ",", 
+                RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+              RowBox[{"rot", "[", 
+               RowBox[{"degtorad", "[", 
+                RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+           "enb"}], "]"}], "/.", 
+         RowBox[{"\[Alpha]", "\[Rule]", 
+          RowBox[{"degtorad", "[", " ", "a", "]"}]}]}]}], 
+       "\[IndentingNewLine]", "}"}], "\[IndentingNewLine]", "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\[Theta]", ",", "0", ",", "360"}], "}"}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0.5"}], "}"}]}], ",", 
+     RowBox[{"PlotLegends", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\"\<0\>\"", ",", "\"\<45\>\"", ",", "\"\<90\>\""}], "}"}]}]}],
+     "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a", ",", "0.5", ",", "\"\<phase difference\>\""}], "}"}], ",", 
+     "0", ",", "180"}], "}"}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Abs", "[", 
+         RowBox[{
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{"q", ",", "s"}], "]"}], ".", "enb"}], "]"}], "+", 
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{"r", ",", "s"}], "]"}], ".", "enb"}], "]"}], "+", 
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{"q", ",", "t"}], "]"}], ".", "enb"}], "]"}], "-", 
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{"r", ",", "t"}], "]"}], ".", "enb"}], "]"}]}], "]"}], "/.", 
+        RowBox[{"\[Alpha]", "\[Rule]", 
+         RowBox[{"degtorad", "[", " ", "\[Beta]", "]"}]}]}], ",", 
+       RowBox[{"Abs", "[", 
+        RowBox[{"Cos", "[", 
+         RowBox[{"degtorad", "[", "\[Beta]", "]"}], "]"}], "]"}]}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"\[Beta]", ",", 
+       RowBox[{"-", "90"}], ",", "90"}], "}"}], ",", 
+     RowBox[{"GridLines", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", "a", "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", 
+          RowBox[{"Cos", "[", 
+           RowBox[{"degtorad", "[", "a", "]"}], "]"}]}], "}"}]}], "}"}]}], 
+     ",", 
+     RowBox[{"PlotLegends", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\"\<CHSH\>\"", ",", "\"\<visibility\>\""}], "}"}]}]}], "]"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a", ",", 
+       RowBox[{"1", "-", 
+        RowBox[{"1", "/", 
+         SqrtBox["2"]}]}], ",", "\"\<phase difference\>\""}], "}"}], ",", 
+     RowBox[{"-", "90"}], ",", "90"}], "}"}]}], 
+  "]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.7028757823937745`*^9, 3.702875835766774*^9}, {
+   3.7028759628477745`*^9, 3.7028759871177745`*^9}, {3.7028760183887744`*^9, 
+   3.7028760203717747`*^9}, {3.702876097535774*^9, 3.7028761013667746`*^9}, {
+   3.702876186530774*^9, 3.7028761947707744`*^9}, {3.7028762768697743`*^9, 
+   3.7028762809327745`*^9}, {3.7028763694007745`*^9, 
+   3.7028763955587745`*^9}, {3.7029417810660753`*^9, 3.702941785433076*^9}, {
+   3.7029419853020754`*^9, 3.7029420712660756`*^9}, {3.7029428924520755`*^9, 
+   3.7029429052660756`*^9}, {3.702943017084076*^9, 3.7029430444510756`*^9}, 
+   3.7029440881090755`*^9, {3.7070099798352213`*^9, 3.707009982499222*^9}, {
+   3.7143524907169065`*^9, 3.714352490956931*^9}, {3.7143526893737707`*^9, 
+   3.7143526935171847`*^9}, 3.7147734182513027`*^9}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a$$ = 27., Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`a$$], 0.5, "phase difference"}, 0, 180}}, 
+    Typeset`size$$ = {673., {187., 198.}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = True, $CellContext`a$2160$$ =
+     0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`a$$ = 0.5}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`a$$, $CellContext`a$2160$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Plot[{{
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[0]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[0]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enb]], $CellContext`\[Alpha] -> \
+$CellContext`degtorad[$CellContext`a$$]], 
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[45]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-45]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enb]], $CellContext`\[Alpha] -> \
+$CellContext`degtorad[$CellContext`a$$]], 
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[90]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-90]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enb]], $CellContext`\[Alpha] -> \
+$CellContext`degtorad[$CellContext`a$$]]}}, {$CellContext`\[Theta], 0, 360}, 
+        PlotRange -> {0, 0.5}, PlotLegends -> {"0", "45", "90"}], 
+      "Specifications" :> {{{$CellContext`a$$, 0.5, "phase difference"}, 0, 
+         180}}, "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{743., {255., 265.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.7028757879807744`*^9, 3.702875837306774*^9}, 
+   3.702875988214774*^9, 3.7028760226757746`*^9, 3.7028761026247745`*^9, 
+   3.7028761962487745`*^9, 3.7028762816507745`*^9, 3.7028763974927745`*^9, 
+   3.7029417859360757`*^9, 3.7029419881610756`*^9, {3.7029420299690757`*^9, 
+   3.7029420718070755`*^9}, 3.7029429069890757`*^9, {3.7029430350710754`*^9, 
+   3.7029430457280755`*^9}, 3.7029440893850756`*^9, 3.7035481786742764`*^9, 
+   3.7035482455679655`*^9, 3.7051100499889297`*^9, 3.705716230679482*^9, 
+   3.7057203915414696`*^9, 3.705720907681991*^9, 3.70581359775156*^9, {
+   3.705897324601462*^9, 3.705897343885565*^9}, 3.7065792203645554`*^9, 
+   3.707009983405222*^9, 3.7076097025589366`*^9, 3.7095326199450674`*^9, 
+   3.7098537853340044`*^9, 3.710494008966181*^9, {3.7143523303758745`*^9, 
+   3.714352348556692*^9}, 3.7143526946963024`*^9, {3.7147734139453025`*^9, 
+   3.7147734264893026`*^9}, {3.714773581266302*^9, 3.7147736085483027`*^9}, 
+   3.7147981600956564`*^9, {3.714798262118858*^9, 3.7147982879454403`*^9}, 
+   3.715465850674066*^9}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a$$ = 1 - 2^Rational[-1, 2], 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`a$$], 1 - 2^Rational[-1, 2], 
+       "phase difference"}, -90, 90}}, Typeset`size$$ = {729., {183., 194.}}, 
+    Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    True, $CellContext`a$2185$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`a$$ = 1 - 2^Rational[-1, 2]}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`a$$, $CellContext`a$2185$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Plot[{
+         ReplaceAll[
+          Abs[Tr[
+             Dot[
+              
+              KroneckerProduct[$CellContext`q, $CellContext`s], \
+$CellContext`enb]] + Tr[
+             Dot[
+              
+              KroneckerProduct[$CellContext`r, $CellContext`s], \
+$CellContext`enb]] + Tr[
+             Dot[
+              
+              KroneckerProduct[$CellContext`q, $CellContext`t], \
+$CellContext`enb]] - Tr[
+            Dot[
+             
+             KroneckerProduct[$CellContext`r, $CellContext`t], \
+$CellContext`enb]]], $CellContext`\[Alpha] -> \
+$CellContext`degtorad[$CellContext`\[Beta]]], 
+         Abs[
+          Cos[
+           $CellContext`degtorad[$CellContext`\[Beta]]]]}, {$CellContext`\
+\[Beta], -90, 90}, GridLines -> {{$CellContext`a$$}, {2, 
+           Cos[
+            $CellContext`degtorad[$CellContext`a$$]]}}, 
+        PlotLegends -> {"CHSH", "visibility"}], 
+      "Specifications" :> {{{$CellContext`a$$, 1 - 2^Rational[-1, 2], 
+          "phase difference"}, -90, 90}}, "Options" :> {}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{799., {251., 261.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.7028757879807744`*^9, 3.702875837306774*^9}, 
+   3.702875988214774*^9, 3.7028760226757746`*^9, 3.7028761026247745`*^9, 
+   3.7028761962487745`*^9, 3.7028762816507745`*^9, 3.7028763974927745`*^9, 
+   3.7029417859360757`*^9, 3.7029419881610756`*^9, {3.7029420299690757`*^9, 
+   3.7029420718070755`*^9}, 3.7029429069890757`*^9, {3.7029430350710754`*^9, 
+   3.7029430457280755`*^9}, 3.7029440893850756`*^9, 3.7035481786742764`*^9, 
+   3.7035482455679655`*^9, 3.7051100499889297`*^9, 3.705716230679482*^9, 
+   3.7057203915414696`*^9, 3.705720907681991*^9, 3.70581359775156*^9, {
+   3.705897324601462*^9, 3.705897343885565*^9}, 3.7065792203645554`*^9, 
+   3.707009983405222*^9, 3.7076097025589366`*^9, 3.7095326199450674`*^9, 
+   3.7098537853340044`*^9, 3.710494008966181*^9, {3.7143523303758745`*^9, 
+   3.714352348556692*^9}, 3.7143526946963024`*^9, {3.7147734139453025`*^9, 
+   3.7147734264893026`*^9}, {3.714773581266302*^9, 3.7147736085483027`*^9}, 
+   3.7147981600956564`*^9, {3.714798262118858*^9, 3.7147982879454403`*^9}, 
+   3.715465850811296*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+The CHSH and visibility when changing all three parameters\
+\>", "Section",
+ CellChangeTimes->{{3.731288522145172*^9, 3.731288528748241*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"enmix", "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{"1", "-", "p"}], "4"], 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}]}], "}"}]}], "+", 
+     RowBox[{
+      RowBox[{"(", "p", ")"}], 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\[Beta]", ",", "0", ",", "0", ",", 
+          RowBox[{
+           SqrtBox["\[Beta]"], 
+           SqrtBox[
+            RowBox[{"(", 
+             RowBox[{"1", "-", "\[Beta]"}], " ", ")"}]], 
+           RowBox[{"Exp", "[", 
+            RowBox[{
+             RowBox[{"-", "\[ImaginaryI]"}], " ", "\[Alpha]"}], "]"}]}]}], 
+         "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           SqrtBox[
+            RowBox[{"(", 
+             RowBox[{"1", "-", "\[Beta]"}], " ", ")"}]], 
+           SqrtBox["\[Beta]"], 
+           RowBox[{"Exp", "[", 
+            RowBox[{"\[ImaginaryI]", " ", "\[Alpha]"}], "]"}]}], ",", "0", 
+          ",", "0", ",", 
+          RowBox[{"(", 
+           RowBox[{"1", "-", "\[Beta]"}], " ", ")"}]}], "}"}]}], "}"}]}]}]}], 
+   ";"}], "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.7057186047372704`*^9, 3.705718650688898*^9}, {
+   3.7057187195458364`*^9, 3.7057187550738688`*^9}, {3.7154821016813583`*^9, 
+   3.715482106039648*^9}, {3.7154821709436007`*^9, 3.7154821722301807`*^9}, 
+   3.7312882388529987`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Manipulate", "[", 
+   RowBox[{
+    RowBox[{"Plot", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", "0", "]"}], "]"}], ".", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", "1", "}"}], ",", 
+                 RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+               RowBox[{"{", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", "0", "]"}], "]"}]}], ",", 
+              RowBox[{
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", "1", "}"}], ",", 
+                 RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+               RowBox[{"{", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", 
+                 RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+            "enmix"}], "]"}], "/.", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"\[Alpha]", "\[Rule]", 
+             RowBox[{"degtorad", "[", " ", "a", "]"}]}], ",", 
+            RowBox[{"\[Beta]", "\[Rule]", "bb"}], ",", 
+            RowBox[{"p", "\[Rule]", "pp"}]}], "}"}]}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", "45", "]"}], "]"}], ".", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", "1", "}"}], ",", 
+                 RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+               RowBox[{"{", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", 
+                 RowBox[{"-", "45"}], "]"}], "]"}]}], ",", 
+              RowBox[{
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", "1", "}"}], ",", 
+                 RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+               RowBox[{"{", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", 
+                 RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+            "enmix"}], "]"}], "/.", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"\[Alpha]", "\[Rule]", 
+             RowBox[{"degtorad", "[", " ", "a", "]"}]}], ",", 
+            RowBox[{"\[Beta]", "\[Rule]", "bb"}], ",", 
+            RowBox[{"p", "\[Rule]", "pp"}]}], "}"}]}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", "90", "]"}], "]"}], ".", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", "1", "}"}], ",", 
+                 RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+               RowBox[{"{", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", 
+                 RowBox[{"-", "90"}], "]"}], "]"}]}], ",", 
+              RowBox[{
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", "1", "}"}], ",", 
+                 RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+               RowBox[{"{", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", 
+                 RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+            "enmix"}], "]"}], "/.", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"\[Alpha]", "\[Rule]", 
+             RowBox[{"degtorad", "[", " ", "a", "]"}]}], ",", 
+            RowBox[{"\[Beta]", "\[Rule]", "bb"}], ",", 
+            RowBox[{"p", "\[Rule]", "pp"}]}], "}"}]}], ",", 
+         RowBox[{
+          RowBox[{"Tr", "[", 
+           RowBox[{
+            RowBox[{"KroneckerProduct", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", 
+                 RowBox[{"-", "45"}], "]"}], "]"}], ".", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", "1", "}"}], ",", 
+                 RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+               RowBox[{"{", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", "45", "]"}], "]"}]}], ",", 
+              RowBox[{
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", "1", "}"}], ",", 
+                 RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+               RowBox[{"{", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+               RowBox[{"rot", "[", 
+                RowBox[{"degtorad", "[", 
+                 RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+            "enmix"}], "]"}], "/.", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"\[Alpha]", "\[Rule]", 
+             RowBox[{"degtorad", "[", " ", "a", "]"}]}], ",", 
+            RowBox[{"\[Beta]", "\[Rule]", "bb"}], ",", 
+            RowBox[{"p", "\[Rule]", "pp"}]}], "}"}]}]}], 
+        "\[IndentingNewLine]", "}"}], "\[IndentingNewLine]", "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"\[Theta]", ",", "0", ",", "360"}], "}"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "1"}], "}"}]}], ",", 
+      RowBox[{"PlotLegends", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"\"\<0\>\"", ",", "\"\<45\>\"", ",", "\"\<90\>\""}], 
+        "}"}]}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a", ",", "0.5", ",", "\"\<phase difference\>\""}], "}"}], ",", 
+      RowBox[{"-", "90"}], ",", "90"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"bb", ",", "0.5", ",", "\"\<imbalance\>\""}], "}"}], ",", "0", 
+      ",", "1"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"pp", ",", "1", ",", "\"\<deg of polarisation\>\""}], "}"}], 
+      ",", "0", ",", "1"}], "\[IndentingNewLine]", "}"}]}], "]"}], 
+  "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.716261714908773*^9, 3.7162617460259857`*^9}, {
+  3.716263465884232*^9, 3.7162634727490387`*^9}, {3.718074557913422*^9, 
+  3.7180745671098223`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a$$ = 21.60000000000001, $CellContext`bb$$ =
+     0.623, $CellContext`pp$$ = 0.913, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`a$$], 0.5, "phase difference"}, -90, 90}, {{
+       Hold[$CellContext`bb$$], 0.5, "imbalance"}, 0, 1}, {{
+       Hold[$CellContext`pp$$], 1, "deg of polarisation"}, 0, 1}}, 
+    Typeset`size$$ = {673., {187., 198.}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = True, $CellContext`a$3042$$ =
+     0, $CellContext`bb$3043$$ = 0, $CellContext`pp$3044$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`a$$ = 0.5, $CellContext`bb$$ = 
+        0.5, $CellContext`pp$$ = 1}, "ControllerVariables" :> {
+        Hold[$CellContext`a$$, $CellContext`a$3042$$, 0], 
+        Hold[$CellContext`bb$$, $CellContext`bb$3043$$, 0], 
+        Hold[$CellContext`pp$$, $CellContext`pp$3044$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Plot[{{
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[0]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[0]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enmix]], {$CellContext`\[Alpha] -> \
+$CellContext`degtorad[$CellContext`a$$], $CellContext`\[Beta] -> \
+$CellContext`bb$$, $CellContext`p -> $CellContext`pp$$}], 
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[45]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-45]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enmix]], {$CellContext`\[Alpha] -> \
+$CellContext`degtorad[$CellContext`a$$], $CellContext`\[Beta] -> \
+$CellContext`bb$$, $CellContext`p -> $CellContext`pp$$}], 
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[90]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-90]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enmix]], {$CellContext`\[Alpha] -> \
+$CellContext`degtorad[$CellContext`a$$], $CellContext`\[Beta] -> \
+$CellContext`bb$$, $CellContext`p -> $CellContext`pp$$}], 
+          ReplaceAll[
+           Tr[
+            Dot[
+             KroneckerProduct[
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[-45]], {{1}, {0}}, {{1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[45]]], 
+              Dot[
+               $CellContext`rot[
+                $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{
+               1, 0}}, 
+               $CellContext`rot[
+                $CellContext`degtorad[-$CellContext`\[Theta]]]]], \
+$CellContext`enmix]], {$CellContext`\[Alpha] -> \
+$CellContext`degtorad[$CellContext`a$$], $CellContext`\[Beta] -> \
+$CellContext`bb$$, $CellContext`p -> $CellContext`pp$$}]}}, {$CellContext`\
+\[Theta], 0, 360}, PlotRange -> {0, 1}, PlotLegends -> {"0", "45", "90"}], 
+      "Specifications" :> {{{$CellContext`a$$, 0.5, "phase difference"}, -90, 
+         90}, {{$CellContext`bb$$, 0.5, "imbalance"}, 0, 
+         1}, {{$CellContext`pp$$, 1, "deg of polarisation"}, 0, 1}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{743., {293., 303.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.716261747638996*^9, 3.716263473455647*^9, 3.71807456765042*^9, {
+   3.731288244536484*^9, 3.731288251373866*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+The CHSH and visibility when changing all three parameters, when only using \
+one one analyser.\
+\>", "Section",
+ CellChangeTimes->{{3.7312885442091017`*^9, 3.731288608352517*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Tr", "[", 
+       RowBox[{
+        RowBox[{"KroneckerProduct", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"rot", "[", 
+            RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+           RowBox[{"rot", "[", 
+            RowBox[{"degtorad", "[", 
+             RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}], ",", 
+          RowBox[{
+           RowBox[{"rot", "[", 
+            RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "1", "}"}], ",", 
+             RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+           RowBox[{"{", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+           RowBox[{"rot", "[", 
+            RowBox[{"degtorad", "[", 
+             RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], ".", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           FractionBox[
+            RowBox[{"1", "-", "p"}], "4"], 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "1", ",", "0", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", "1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}]}], "}"}]}], 
+          "+", 
+          RowBox[{
+           FractionBox[
+            RowBox[{"(", "p", ")"}], "1"], 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"\[Beta]", ",", "0", ",", "0", ",", 
+               RowBox[{
+                RowBox[{"-", 
+                 SqrtBox[
+                  RowBox[{"1", "-", "\[Beta]"}]]}], " ", 
+                SqrtBox["\[Beta]"], 
+                SuperscriptBox["\[ExponentialE]", 
+                 RowBox[{
+                  RowBox[{"-", "\[ImaginaryI]"}], " ", 
+                  RowBox[{"degtorad", "[", "\[Alpha]", "]"}]}]]}]}], "}"}], 
+             ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"-", 
+                 SqrtBox[
+                  RowBox[{"1", "-", "\[Beta]"}]]}], " ", 
+                SqrtBox["\[Beta]"], 
+                SuperscriptBox["\[ExponentialE]", 
+                 RowBox[{"\[ImaginaryI]", " ", 
+                  RowBox[{"degtorad", "[", "\[Alpha]", "]"}]}]]}], ",", "0", 
+               ",", "0", ",", 
+               RowBox[{"1", "-", "\[Beta]"}]}], "}"}]}], "}"}]}]}], ")"}]}], 
+       "]"}], "/.", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"\[Beta]", "\[Rule]", "b"}], ",", 
+        RowBox[{"\[Alpha]", "\[Rule]", "a"}]}], "}"}]}], 
+     "\[IndentingNewLine]", ",", 
+     RowBox[{"{", 
+      RowBox[{"\[Theta]", ",", "0", ",", "180"}], "}"}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "1"}], "}"}]}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\[Alpha]", ",", "0", ",", "180"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"b", ",", "0.5", ",", "\"\<imbalance\>\""}], "}"}], ",", "0", 
+     ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"p", ",", "1", ",", "\"\<deg of polarisation\>\""}], "}"}], ",",
+      "0", ",", "1"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{
+  3.7162634421726294`*^9, {3.716263594485084*^9, 3.716263699859763*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`b$$ = 0.46, $CellContext`p$$ = 
+    1, $CellContext`\[Alpha]$$ = 0, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`\[Alpha]$$], 0, 180}, {{
+       Hold[$CellContext`b$$], 0.5, "imbalance"}, 0, 1}, {{
+       Hold[$CellContext`p$$], 1, "deg of polarisation"}, 0, 1}}, 
+    Typeset`size$$ = {576., {187., 198.}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    True, $CellContext`\[Alpha]$3949$$ = 0, $CellContext`b$3950$$ = 
+    0, $CellContext`p$3951$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`b$$ = 0.5, $CellContext`p$$ = 
+        1, $CellContext`\[Alpha]$$ = 0}, "ControllerVariables" :> {
+        Hold[$CellContext`\[Alpha]$$, $CellContext`\[Alpha]$3949$$, 0], 
+        Hold[$CellContext`b$$, $CellContext`b$3950$$, 0], 
+        Hold[$CellContext`p$$, $CellContext`p$3951$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Plot[
+        ReplaceAll[
+         Tr[
+          Dot[
+           KroneckerProduct[
+            Dot[
+             $CellContext`rot[
+              $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{1, 
+             0}}, 
+             $CellContext`rot[
+              $CellContext`degtorad[-$CellContext`\[Theta]]]], 
+            Dot[
+             $CellContext`rot[
+              $CellContext`degtorad[$CellContext`\[Theta]]], {{1}, {0}}, {{1, 
+             0}}, 
+             $CellContext`rot[
+              $CellContext`degtorad[-$CellContext`\[Theta]]]]], ((
+              1 - $CellContext`p$$)/4) {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 
+             0}, {0, 0, 0, 1}} + ($CellContext`p$$/
+             1) {{$CellContext`\[Beta], 0, 
+               0, ((-(1 - $CellContext`\[Beta])^
+                  Rational[1, 2]) $CellContext`\[Beta]^Rational[1, 2]) 
+               E^((-I) $CellContext`degtorad[$CellContext`\[Alpha]$$])}, {0, 
+              0, 0, 0}, {0, 0, 0, 
+              0}, {((-(1 - $CellContext`\[Beta])^
+                  Rational[1, 2]) $CellContext`\[Beta]^Rational[1, 2]) 
+               E^(I $CellContext`degtorad[$CellContext`\[Alpha]$$]), 0, 0, 
+               1 - $CellContext`\[Beta]}}]], {$CellContext`\[Beta] -> \
+$CellContext`b$$, $CellContext`\[Alpha]$$ -> $CellContext`a}], {$CellContext`\
+\[Theta], 0, 180}, PlotRange -> {0, 1}], 
+      "Specifications" :> {{$CellContext`\[Alpha]$$, 0, 
+         180}, {{$CellContext`b$$, 0.5, "imbalance"}, 0, 
+         1}, {{$CellContext`p$$, 1, "deg of polarisation"}, 0, 1}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{646., {293., 303.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.7162618205292788`*^9, 3.716263442777923*^9, {3.716263597624194*^9, 
+   3.7162637005788927`*^9}, 3.73128826768961*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+This part shows how to calcualte the function to link the CHSH, visibility \
+and Fidelity \
+\>", "Section",
+ CellChangeTimes->{{3.73129195569074*^9, 3.731291970319437*^9}, {
+  3.7312920960324*^9, 3.731292117807026*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Some definition for states", "Subsection",
+ CellChangeTimes->{{3.731292484544455*^9, 3.731292494095841*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "state", " ", "with", " ", "only", " ", "mixing", " ", "with", " ", 
+    "white", " ", "noise"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"phi", "=", 
+     RowBox[{
+      RowBox[{
+       FractionBox[
+        RowBox[{"1", "-", "p"}], "4"], 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"1", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", "1", ",", "0", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "1", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}]}], "}"}]}], "+", 
+      RowBox[{
+       FractionBox[
+        RowBox[{"(", "p", ")"}], "2"], 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", "1", "}"}], ",", 
+          RowBox[{"{", "0", "}"}], ",", 
+          RowBox[{"{", "0", "}"}], ",", 
+          RowBox[{"{", "1", "}"}]}], "}"}], ".", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "0", "}"}], ",", 
+           RowBox[{"{", "0", "}"}], ",", 
+           RowBox[{"{", "1", "}"}]}], "}"}], "]"}]}]}]}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"state", " ", "with", " ", "relative", " ", "phase"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"enb", "=", 
+     RowBox[{"0.5", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "0", ",", 
+          RowBox[{"Exp", "[", 
+           RowBox[{
+            RowBox[{"-", "\[ImaginaryI]"}], " ", "\[Alpha]"}], "]"}]}], "}"}],
+         ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Exp", "[", 
+           RowBox[{"\[ImaginaryI]", " ", "\[Alpha]"}], "]"}], ",", "0", ",", 
+          "0", ",", "1"}], "}"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"state", " ", "with", " ", "imbalance"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"enc", "=", 
+     RowBox[{
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{
+          SqrtBox["\[Beta]"], ",", "0", ",", "0", ",", 
+          SqrtBox[
+           RowBox[{"(", 
+            RowBox[{"1", "-", "\[Beta]"}], " ", ")"}]]}], "}"}], "}"}], "]"}],
+       ".", 
+      RowBox[{"{", 
+       RowBox[{"{", 
+        RowBox[{
+         SqrtBox["\[Beta]"], ",", "0", ",", "0", ",", 
+         SqrtBox[
+          RowBox[{"(", 
+           RowBox[{"1", "-", "\[Beta]"}], " ", ")"}]]}], "}"}], "}"}]}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"max", " ", "entangled", " ", "state"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"max", "=", 
+     RowBox[{
+      FractionBox["1", 
+       SqrtBox["2"]], 
+      RowBox[{"{", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0", ",", "0", ",", "1"}], "}"}], "}"}]}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"enmax", "=", 
+     RowBox[{
+      RowBox[{"Transpose", "[", "max", "]"}], ".", "max"}]}], ";"}], 
+   "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.698382529340269*^9, 3.698382621589493*^9}, {
+   3.701993021553343*^9, 3.7019930217053585`*^9}, {3.702870125391774*^9, 
+   3.702870125648774*^9}, {3.7028711330067744`*^9, 3.7028711428227744`*^9}, {
+   3.702871179556774*^9, 3.702871186636774*^9}, {3.7028725683507743`*^9, 
+   3.7028725699257746`*^9}, {3.7028751180227747`*^9, 3.7028751187507744`*^9}, 
+   3.702876762063774*^9, {3.703548232994708*^9, 3.703548234954904*^9}, 
+   3.7035482649639044`*^9, {3.7035496610010366`*^9, 3.7035496637594852`*^9}, {
+   3.7035598859763727`*^9, 3.7035599096553726`*^9}, {3.7153015911227913`*^9, 
+   3.7153015924417915`*^9}, {3.731292516650157*^9, 3.731292600423938*^9}, {
+   3.731293118487035*^9, 3.731293139616461*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "How to calculate the visibility of HH/VV basis, \n",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["V", "HH"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " = ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    SubscriptBox["Max", "HH"]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "- ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["Min", "HH"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ")/",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    SubscriptBox["Max", "HH"]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "+ ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["Min", "HH"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "), the coincident can be calculated by the following function:\n"
+}], "Subsection",
+ CellChangeTimes->{{3.73129220857514*^9, 3.731292372252836*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Tr", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"KroneckerProduct", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"rot", "[", 
+       RowBox[{"degtorad", "[", "0", "]"}], "]"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", "1", "}"}], ",", 
+        RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+      RowBox[{"rot", "[", 
+       RowBox[{"degtorad", "[", "0", "]"}], "]"}]}], 
+     RowBox[{"(*", 
+      RowBox[{"one", " ", "polariser", " ", "set", " ", "at", " ", "HH"}], 
+      "*)"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"rot", "[", 
+       RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", "1", "}"}], ",", 
+        RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+      RowBox[{"rot", "[", 
+       RowBox[{"degtorad", "[", 
+        RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], 
+   RowBox[{"(*", 
+    RowBox[{
+    "one", " ", "polariser", " ", "scan", " ", "for", " ", "360", " ", 
+     "degree"}], "*)"}], "\[IndentingNewLine]", ".", "phi"}], 
+  RowBox[{"(*", 
+   RowBox[{"refer", " ", "above"}], "*)"}], "]"}]], "Input",
+ CellChangeTimes->{
+  3.731292008776526*^9, {3.731292389407652*^9, 3.731292451765069*^9}, {
+   3.73129260870326*^9, 3.7312926135869513`*^9}, {3.7312928035032177`*^9, 
+   3.731292804326351*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"1", "-", "p"}], "4"], "+", 
+     FractionBox["p", "2"]}], ")"}], " ", 
+   SuperscriptBox[
+    RowBox[{"Cos", "[", 
+     FractionBox[
+      RowBox[{"\[Pi]", " ", "\[Theta]"}], "180"], "]"}], "2"]}], "+", 
+  RowBox[{
+   FractionBox["1", "4"], " ", 
+   RowBox[{"(", 
+    RowBox[{"1", "-", "p"}], ")"}], " ", 
+   SuperscriptBox[
+    RowBox[{"Sin", "[", 
+     FractionBox[
+      RowBox[{"\[Pi]", " ", "\[Theta]"}], "180"], "]"}], "2"]}]}]], "Output",
+ CellChangeTimes->{3.731292616697014*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["The above function will give us max of ", "Subsubsection"],
+ StyleBox[Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{"1", "-", "p"}], "4"], "+", 
+    FractionBox["p", "2"], " "}], TraditionalForm]], "Subsubsection",
+  FormatType->"TraditionalForm"], "Subsubsection"],
+ StyleBox[" and min of ", "Subsubsection"],
+ StyleBox[Cell[BoxData[
+  FormBox[
+   FractionBox[
+    RowBox[{"1", "-", "p"}], "4"], TraditionalForm]], "Subsubsection"], 
+  "Subsubsection"],
+ StyleBox[". Hence ", "Subsubsection"],
+ StyleBox[Cell[BoxData[
+  FormBox[
+   SubscriptBox["V", "HH"], TraditionalForm]], "Subsubsection",
+  FormatType->"TraditionalForm"], "Subsubsection"],
+ StyleBox["=p", "Subsubsection"]
+}], "Text",
+ CellChangeTimes->{{3.7312926506391068`*^9, 3.7312927487876*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Here is how to calculate visibility of 45 basis, coincidence below\
+\>", "Subsection",
+ CellChangeTimes->{{3.731292767526065*^9, 3.731292786357315*^9}, {
+  3.7312932276081553`*^9, 3.73129323436975*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Tr", "[", 
+     RowBox[{
+      RowBox[{"KroneckerProduct", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"rot", "[", 
+          RowBox[{"degtorad", "[", "45", "]"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+         RowBox[{"{", 
+          RowBox[{"{", 
+           RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+         RowBox[{"rot", "[", 
+          RowBox[{"degtorad", "[", 
+           RowBox[{"-", "45"}], "]"}], "]"}]}], 
+        RowBox[{"(*", 
+         RowBox[{"one", " ", "polariser", " ", "set", " ", "at", " ", "HH"}], 
+         "*)"}], ",", 
+        RowBox[{
+         RowBox[{"rot", "[", 
+          RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", "1", "}"}], ",", 
+           RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+         RowBox[{"{", 
+          RowBox[{"{", 
+           RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+         RowBox[{"rot", "[", 
+          RowBox[{"degtorad", "[", 
+           RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], 
+      RowBox[{"(*", 
+       RowBox[{
+       "one", " ", "polariser", " ", "scan", " ", "for", " ", "360", " ", 
+        "degree"}], "*)"}], "\[IndentingNewLine]", ".", "phi"}], "]"}], "//", 
+    "FullSimplify"}], "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.731292789275505*^9, 3.731292823554611*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "4"], " ", 
+  RowBox[{"(", 
+   RowBox[{"1", "+", 
+    RowBox[{"p", " ", 
+     RowBox[{"Sin", "[", 
+      FractionBox[
+       RowBox[{"\[Pi]", " ", "\[Theta]"}], "90"], "]"}]}]}], 
+   ")"}]}]], "Output",
+ CellChangeTimes->{{3.7312928188322763`*^9, 3.7312928240323257`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Max and min occurs at Sin=1 and -1, the visibility ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["V", "45"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is [",
+ Cell[BoxData[
+  FormBox[
+   FractionBox["1", "4"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "(1+p)- ",
+ Cell[BoxData[
+  FormBox[
+   FractionBox["1", "4"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "(1-p)]/[",
+ Cell[BoxData[
+  FormBox[
+   FractionBox["1", "4"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "(1+p)+ ",
+ Cell[BoxData[
+  FormBox[
+   FractionBox["1", "4"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "(1-p)]=p"
+}], "Subsubsection",
+ CellChangeTimes->{{3.731292857993589*^9, 3.7312928785545893`*^9}, {
+  3.731292911051845*^9, 3.7312929796930313`*^9}}],
+
+Cell["", "Text"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["CHSH", "Subsection"]], "Subsection",
+ CellChangeTimes->{{3.731293077718315*^9, 3.731293078172545*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Abs", "[", 
+   RowBox[{
+    RowBox[{"Tr", "[", 
+     RowBox[{
+      RowBox[{"KroneckerProduct", "[", 
+       RowBox[{"q", ",", "s"}], "]"}], ".", "phi"}], "]"}], "+", 
+    RowBox[{"Tr", "[", 
+     RowBox[{
+      RowBox[{"KroneckerProduct", "[", 
+       RowBox[{"r", ",", "s"}], "]"}], ".", "phi"}], "]"}], "+", 
+    RowBox[{"Tr", "[", 
+     RowBox[{
+      RowBox[{"KroneckerProduct", "[", 
+       RowBox[{"q", ",", "t"}], "]"}], ".", "phi"}], "]"}], "-", 
+    RowBox[{"Tr", "[", 
+     RowBox[{
+      RowBox[{"KroneckerProduct", "[", 
+       RowBox[{"r", ",", "t"}], "]"}], ".", "phi"}], "]"}]}], "]"}], "//", 
+  "Simplify"}]], "Input",
+ CellChangeTimes->{{3.731293041829376*^9, 3.7312930471090527`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"2", " ", 
+  SqrtBox["2"], " ", 
+  RowBox[{"Abs", "[", "p", "]"}]}]], "Output",
+ CellChangeTimes->{{3.731293042203289*^9, 3.731293047480628*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Fidelty", "Subsection",
+ CellChangeTimes->{{3.731293066745513*^9, 3.7312930705316277`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Tr", "[", 
+  RowBox[{"enmax", ".", "phi"}], "]"}]], "Input",
+ CellChangeTimes->{{3.731293147327629*^9, 3.731293148184208*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox[
+   RowBox[{"1", "-", "p"}], "4"], "+", "p"}]], "Output",
+ CellChangeTimes->{3.731293149198949*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["For general state", "Section",
+ CellChangeTimes->{{3.731293170337936*^9, 3.73129317756246*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"enmix", "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{"1", "-", "p"}], "4"], 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}]}], "}"}]}], "+", 
+     RowBox[{
+      RowBox[{"(", "p", ")"}], 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\[Beta]", ",", "0", ",", "0", ",", 
+          RowBox[{
+           SqrtBox["\[Beta]"], 
+           SqrtBox[
+            RowBox[{"(", 
+             RowBox[{"1", "-", "\[Beta]"}], " ", ")"}]], 
+           RowBox[{"Exp", "[", 
+            RowBox[{
+             RowBox[{"-", "\[ImaginaryI]"}], " ", "\[Alpha]"}], "]"}]}]}], 
+         "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           SqrtBox[
+            RowBox[{"(", 
+             RowBox[{"1", "-", "\[Beta]"}], " ", ")"}]], 
+           SqrtBox["\[Beta]"], 
+           RowBox[{"Exp", "[", 
+            RowBox[{"\[ImaginaryI]", " ", "\[Alpha]"}], "]"}]}], ",", "0", 
+          ",", "0", ",", 
+          RowBox[{"(", 
+           RowBox[{"1", "-", "\[Beta]"}], " ", ")"}]}], "}"}]}], "}"}]}]}]}], 
+   ";"}], "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.7057186047372704`*^9, 3.705718650688898*^9}, {
+   3.7057187195458364`*^9, 3.7057187550738688`*^9}, {3.7154821016813583`*^9, 
+   3.715482106039648*^9}, {3.7154821709436007`*^9, 3.7154821722301807`*^9}, 
+   3.7312882388529987`*^9}],
+
+Cell[CellGroupData[{
+
+Cell["visibility", "Subsection",
+ CellChangeTimes->{{3.7312934747195807`*^9, 3.731293475988142*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Tr", "[", 
+   RowBox[{
+    RowBox[{"KroneckerProduct", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"rot", "[", 
+        RowBox[{"degtorad", "[", "45", "]"}], "]"}], ".", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", "1", "}"}], ",", 
+         RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+       RowBox[{"rot", "[", 
+        RowBox[{"degtorad", "[", 
+         RowBox[{"-", "45"}], "]"}], "]"}]}], 
+      RowBox[{"(*", 
+       RowBox[{"one", " ", "polariser", " ", "set", " ", "at", " ", "HH"}], 
+       "*)"}], ",", 
+      RowBox[{
+       RowBox[{"rot", "[", 
+        RowBox[{"degtorad", "[", "\[Theta]", "]"}], "]"}], ".", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", "1", "}"}], ",", 
+         RowBox[{"{", "0", "}"}]}], "}"}], ".", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], "}"}], ".", 
+       RowBox[{"rot", "[", 
+        RowBox[{"degtorad", "[", 
+         RowBox[{"-", "\[Theta]"}], "]"}], "]"}]}]}], "]"}], 
+    RowBox[{"(*", 
+     RowBox[{
+     "one", " ", "polariser", " ", "scan", " ", "for", " ", "360", " ", 
+      "degree"}], "*)"}], "\[IndentingNewLine]", ".", "enmix"}], "]"}], "//", 
+  "FullSimplify"}]], "Input",
+ CellChangeTimes->{{3.7312932445642633`*^9, 3.731293245621643*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "4"], " ", 
+  RowBox[{"(", 
+   RowBox[{"1", "+", 
+    RowBox[{"p", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "1"}], "+", 
+       RowBox[{"2", " ", "\[Beta]"}]}], ")"}], " ", 
+     RowBox[{"Cos", "[", 
+      FractionBox[
+       RowBox[{"\[Pi]", " ", "\[Theta]"}], "90"], "]"}]}], "+", 
+    RowBox[{"2", " ", "p", " ", 
+     SqrtBox[
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "1"}], "+", "\[Beta]"}], ")"}]}], " ", "\[Beta]"}]], 
+     " ", 
+     RowBox[{"Cos", "[", "\[Alpha]", "]"}], " ", 
+     RowBox[{"Sin", "[", 
+      FractionBox[
+       RowBox[{"\[Pi]", " ", "\[Theta]"}], "90"], "]"}]}]}], 
+   ")"}]}]], "Output",
+ CellChangeTimes->{3.7312932469496403`*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "can further simplify but mathematica does not do that \na sin[x]+b cos[x]= \
+c sin[x+\[Phi]]\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"c", "=", 
+    SqrtBox[
+     RowBox[{
+      RowBox[{"a", "^", "2"}], "+", 
+      RowBox[{"b", "^", "2"}]}]]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", \[Phi]= arctan[b/a] (\[Phi] not very important)"
+}], "Subsubsection",
+ CellChangeTimes->{{3.731293284260241*^9, 3.731293302176568*^9}, {
+  3.731293357302988*^9, 3.731293453236861*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["CHSH", "Subsection",
+ CellChangeTimes->{{3.731293466277115*^9, 3.73129346674304*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Abs", "[", 
+   RowBox[{
+    RowBox[{"Tr", "[", 
+     RowBox[{
+      RowBox[{"KroneckerProduct", "[", 
+       RowBox[{"q", ",", "s"}], "]"}], ".", "enmix"}], "]"}], "+", 
+    RowBox[{"Tr", "[", 
+     RowBox[{
+      RowBox[{"KroneckerProduct", "[", 
+       RowBox[{"r", ",", "s"}], "]"}], ".", "enmix"}], "]"}], "+", 
+    RowBox[{"Tr", "[", 
+     RowBox[{
+      RowBox[{"KroneckerProduct", "[", 
+       RowBox[{"q", ",", "t"}], "]"}], ".", "enmix"}], "]"}], "-", 
+    RowBox[{"Tr", "[", 
+     RowBox[{
+      RowBox[{"KroneckerProduct", "[", 
+       RowBox[{"r", ",", "t"}], "]"}], ".", "enmix"}], "]"}]}], "]"}], "//", 
+  "FullSimplify"}]], "Input",
+ CellChangeTimes->{{3.731293486926633*^9, 3.731293512869067*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  SqrtBox["2"], " ", 
+  RowBox[{"Abs", "[", 
+   RowBox[{"p", "+", 
+    RowBox[{"2", " ", "p", " ", 
+     SqrtBox[
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "1"}], "+", "\[Beta]"}], ")"}]}], " ", "\[Beta]"}]], 
+     " ", 
+     RowBox[{"Cos", "[", "\[Alpha]", "]"}]}]}], "]"}]}]], "Output",
+ CellChangeTimes->{{3.731293505575756*^9, 3.731293514544219*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Fidelity", "Subsection",
+ CellChangeTimes->{{3.73129352094036*^9, 3.731293522073882*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Tr", "[", 
+   RowBox[{"enmix", ".", "phi"}], "]"}], "//", "FullSimplify"}]], "Input",
+ CellChangeTimes->{{3.731293535339498*^9, 3.73129354087129*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "4"], " ", 
+  RowBox[{"(", 
+   RowBox[{"1", "+", 
+    SuperscriptBox["p", "2"], "+", 
+    RowBox[{"4", " ", 
+     SuperscriptBox["p", "2"], " ", 
+     SqrtBox[
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "1"}], "+", "\[Beta]"}], ")"}]}], " ", "\[Beta]"}]], 
+     " ", 
+     RowBox[{"Cos", "[", "\[Alpha]", "]"}]}]}], ")"}]}]], "Output",
+ CellChangeTimes->{{3.7312935361666117`*^9, 3.7312935413701067`*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1861, 1056},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+Magnification:>1.6 Inherited,
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (February 7, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 325, 7, 353, "Section"],
+Cell[908, 31, 188, 3, 49, "Input"],
+Cell[1099, 36, 7896, 240, 999, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9032, 281, 138, 3, 128, "Section"],
+Cell[CellGroupData[{
+Cell[9195, 288, 8335, 210, 562, "Input"],
+Cell[17533, 500, 7457, 166, 546, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25039, 672, 142, 3, 128, "Section"],
+Cell[CellGroupData[{
+Cell[25206, 679, 8029, 210, 630, "Input"],
+Cell[33238, 891, 4792, 108, 546, "Output"],
+Cell[38033, 1001, 3078, 64, 528, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[41160, 1071, 145, 3, 128, "Section"],
+Cell[CellGroupData[{
+Cell[41330, 1078, 7590, 192, 596, "Input"],
+Cell[48923, 1272, 4550, 98, 546, "Output"],
+Cell[53476, 1372, 3541, 74, 538, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[57066, 1452, 151, 3, 128, "Section"],
+Cell[57220, 1457, 1919, 53, 170, "Input"],
+Cell[CellGroupData[{
+Cell[59164, 1514, 7572, 190, 498, "Input"],
+Cell[66739, 1706, 5138, 115, 622, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[71926, 1827, 190, 4, 185, "Section"],
+Cell[CellGroupData[{
+Cell[72141, 1835, 4047, 109, 382, "Input"],
+Cell[76191, 1946, 3512, 72, 622, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[79752, 2024, 229, 5, 185, "Section"],
+Cell[CellGroupData[{
+Cell[80006, 2033, 114, 1, 70, "Subsection"],
+Cell[80123, 2036, 4147, 113, 481, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[84307, 2154, 833, 30, 150, "Subsection"],
+Cell[CellGroupData[{
+Cell[85165, 2188, 1534, 42, 146, "Input"],
+Cell[86702, 2232, 585, 20, 76, "Output"]
+}, Open  ]],
+Cell[87302, 2255, 804, 22, 76, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[88143, 2282, 212, 4, 70, "Subsection"],
+Cell[CellGroupData[{
+Cell[88380, 2290, 1547, 42, 178, "Input"],
+Cell[89930, 2334, 315, 10, 76, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[90282, 2349, 797, 29, 71, "Subsubsection"],
+Cell[91082, 2380, 16, 0, 49, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[91147, 2386, 126, 1, 70, "Subsection"],
+Cell[CellGroupData[{
+Cell[91298, 2391, 738, 21, 82, "Input"],
+Cell[92039, 2414, 168, 4, 54, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[92256, 2424, 97, 1, 70, "Subsection"],
+Cell[CellGroupData[{
+Cell[92378, 2429, 150, 3, 49, "Input"],
+Cell[92531, 2434, 137, 4, 76, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[92729, 2445, 101, 1, 128, "Section"],
+Cell[92833, 2448, 1919, 53, 170, "Input"],
+Cell[CellGroupData[{
+Cell[94777, 2505, 100, 1, 70, "Subsection"],
+Cell[CellGroupData[{
+Cell[94902, 2510, 1402, 40, 114, "Input"],
+Cell[96307, 2552, 780, 26, 76, "Output"]
+}, Open  ]],
+Cell[97102, 2581, 504, 14, 141, "Subsubsection"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[97643, 2600, 91, 1, 70, "Subsection"],
+Cell[CellGroupData[{
+Cell[97759, 2605, 748, 21, 82, "Input"],
+Cell[98510, 2628, 435, 14, 68, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[98994, 2648, 95, 1, 70, "Subsection"],
+Cell[CellGroupData[{
+Cell[99114, 2653, 185, 4, 49, "Input"],
+Cell[99302, 2659, 504, 16, 109, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

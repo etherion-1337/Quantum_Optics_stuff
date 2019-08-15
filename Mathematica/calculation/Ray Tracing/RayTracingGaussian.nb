@@ -1,0 +1,2756 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[    105352,       2747]
+NotebookOptionsPosition[    103684,       2694]
+NotebookOutlinePosition[    104056,       2710]
+CellTagsIndexPosition[    104013,       2707]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ StyleBox[
+  RowBox[{
+  "Ray", " ", "tracing", " ", "technique", " ", "for", " ", "Gaussian", " ", 
+   "modes", " ", "of", " ", "SPDC", " ", "photon", " ", "collection", " ", 
+   "using", " ", "achromatic", " ", "doublet", " ", "lens", " "}], 
+  "Title"]], "Text",
+ CellChangeTimes->{{3.616576002332952*^9, 3.616576128362458*^9}, {
+  3.6165761641390667`*^9, 3.6165762178164463`*^9}, {3.616794358994396*^9, 
+  3.616794382485126*^9}}],
+
+Cell["\<\
+(draw the system of BBO-AL setup here)\
+\>", "Text",
+ CellChangeTimes->{{3.616576243961535*^9, 3.616576279163808*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"ALL", " ", "WAVELENGTHS", " ", "IN", " ", 
+    RowBox[{"\[Mu]m", "!"}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   StyleBox[
+    RowBox[{
+     RowBox[{"\[Lambda]", "=", "0.867"}], ";"}],
+    Background->RGBColor[1, 0.5, 0.5]], 
+   StyleBox["\[IndentingNewLine]",
+    Background->RGBColor[1, 1, 0]], 
+   StyleBox["\[IndentingNewLine]",
+    Background->RGBColor[1, 1, 0]], 
+   StyleBox[
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"(", "1", ")"}], " ", "fixed", " ", "beam", " ", "waist", " ", 
+      "in", " ", "meter"}], "*)"}],
+    Background->RGBColor[1, 1, 0]], 
+   StyleBox["\[IndentingNewLine]",
+    Background->RGBColor[1, 0.5, 0.5]], 
+   StyleBox[
+    RowBox[{
+     RowBox[{"\[Omega]0", "=", 
+      RowBox[{"87", "*", 
+       RowBox[{"10", "^", 
+        RowBox[{"-", "6"}]}]}]}], ";"}],
+    Background->RGBColor[1, 0.5, 0.5]], 
+   StyleBox["\[IndentingNewLine]",
+    Background->RGBColor[1, 0.5, 0.5]], 
+   StyleBox[
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"(", "2", ")"}], " ", "scan", " ", "through", " ", "beam", " ", 
+      "waist", " ", "in", " ", "meter"}], "*)"}],
+    Background->RGBColor[1, 1, 0]], "\[IndentingNewLine]", 
+   StyleBox["\[IndentingNewLine]",
+    Background->RGBColor[1, 0.5, 0.5]], 
+   RowBox[{"(*", 
+    RowBox[{"divergence", " ", "angle", " ", "in", " ", "radians"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     StyleBox["\[Theta]0",
+      Background->RGBColor[1, 0.5, 0.5]], 
+     StyleBox["=",
+      Background->RGBColor[1, 0.5, 0.5]], 
+     RowBox[{
+      StyleBox[
+       RowBox[{"(", 
+        RowBox[{"\[Lambda]", "*", 
+         RowBox[{"10", "^", 
+          RowBox[{"-", "6"}]}]}], ")"}],
+       Background->RGBColor[1, 0.5, 0.5]], "/", 
+      RowBox[{"(", 
+       RowBox[{"\[Omega]0", "*", "Pi"}], ")"}]}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"rayleigh", " ", "range", " ", "in", " ", "m"}], "*)"}], 
+   StyleBox["\[IndentingNewLine]",
+    Background->RGBColor[1, 1, 0]], 
+   RowBox[{
+    RowBox[{"z0", "=", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"\[Omega]0", "^", "2"}], ")"}], "*", 
+      RowBox[{"Pi", "/", 
+       RowBox[{"(", 
+        RowBox[{"\[Lambda]", "*", 
+         RowBox[{"10", "^", 
+          RowBox[{"-", "6"}]}]}], ")"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"(", "1", ")"}], " ", "fixed", " ", "collection", " ", 
+      "distance", " ", "in", " ", "meter"}], "*)"}],
+    Background->RGBColor[1, 1, 0]], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"d", "=", "0.2"}], ";"}], "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"(", "2", ")"}], " ", "scan", " ", "through", " ", "collection",
+       " ", "distance", " ", "in", " ", "meter"}], "*)"}],
+    Background->RGBColor[1, 1, 0]], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"source", ":", " ", 
+     RowBox[{"refractiveindex", ".", "info"}]}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"airindex", "[", "\[Lambda]_", "]"}], ":=", 
+     RowBox[{"1.000287566`", "+", 
+      RowBox[{"1.3412`", "/", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"10", "^", "18"}], " ", 
+           RowBox[{"(", 
+            RowBox[{"\[Lambda]", " ", "\[Lambda]"}], ")"}]}], ")"}], "/", 
+         RowBox[{"10", "^", "12"}]}], ")"}]}]}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"nair", "=", 
+     RowBox[{"airindex", "[", "\[Lambda]", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Import", " ", "AC", " ", "lens", " ", "specs", " ", "from", " ", 
+     RowBox[{"ThorlabsAC", ".", "xls"}]}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Lens", "=", 
+     RowBox[{
+      RowBox[{
+      "Import", "[", "\"\</photonics/staff/Brigitta/ThorlabsAC.xls\>\"", 
+       "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", "Lens", "]"}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+      "Every", " ", "unique", " ", "achromats", " ", "doublets", " ", "is", 
+       " ", "labeled", " ", "by", " ", "i"}], "=", "1"}], ",", "2", ",", 
+     RowBox[{
+      RowBox[{"3", "..."}], "42", " ", "following", " ", "the", " ", "order", 
+      " ", "in", " ", 
+      RowBox[{"ThorlabsAC", ".", "xls"}]}]}], "*)"}], "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{
+     RowBox[{"i", "=", "1"}], ";"}],
+    Background->RGBColor[1, 0.5, 0.5]], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"R1", "=", 
+     RowBox[{"Lens", "[", 
+      RowBox[{"[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"5", "+", "i"}], ")"}], ",", "2"}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"R2", "=", 
+     RowBox[{"Lens", "[", 
+      RowBox[{"[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"5", "+", "i"}], ")"}], ",", "3"}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"R3", "=", 
+     RowBox[{"Lens", "[", 
+      RowBox[{"[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"5", "+", "i"}], ")"}], ",", "4"}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tc1", "=", 
+     RowBox[{"Lens", "[", 
+      RowBox[{"[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"5", "+", "i"}], ")"}], ",", "5"}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tc2", "=", 
+     RowBox[{"Lens", "[", 
+      RowBox[{"[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"5", "+", "i"}], ")"}], ",", "6"}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"n1", "=", 
+     RowBox[{"Lens", "[", 
+      RowBox[{"[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"5", "+", "i"}], ")"}], ",", "7"}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"n2", "=", 
+     RowBox[{"Lens", "[", 
+      RowBox[{"[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"5", "+", "i"}], ")"}], ",", "8"}], "]"}], "]"}]}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.6166487993762817`*^9, 3.616648817183742*^9}, {
+   3.61664891405103*^9, 3.616649198244307*^9}, {3.616649243111828*^9, 
+   3.616649255624827*^9}, {3.616669393870631*^9, 3.616669408234076*^9}, {
+   3.616669441511047*^9, 3.616669504628625*^9}, {3.616669761927107*^9, 
+   3.616669809972499*^9}, {3.6166698423930893`*^9, 3.6166699400253277`*^9}, {
+   3.616669983453597*^9, 3.616670282658498*^9}, {3.616670329469879*^9, 
+   3.616670385228878*^9}, {3.6166704696809587`*^9, 3.616670564392961*^9}, {
+   3.616670597485558*^9, 3.616670704561252*^9}, {3.616670949405932*^9, 
+   3.6166709881706448`*^9}, {3.616671338081266*^9, 3.616671380721136*^9}, {
+   3.616671866218143*^9, 3.616671897931809*^9}, {3.616672131787195*^9, 
+   3.6166721925568247`*^9}, {3.616672784849092*^9, 3.616672785032683*^9}, {
+   3.616673170683984*^9, 3.616673177710183*^9}, {3.616673769695636*^9, 
+   3.6166737706591043`*^9}, {3.616673884833828*^9, 3.616673885492343*^9}, 
+   3.616674928413802*^9, {3.616712511792451*^9, 3.6167125415324383`*^9}, {
+   3.616712768426303*^9, 3.6167127815853233`*^9}, 3.616712874528791*^9, 
+   3.616712980140832*^9, {3.616735604739682*^9, 3.616735796638254*^9}, {
+   3.616736088413414*^9, 3.616736094018713*^9}, {3.6167488308502703`*^9, 
+   3.616748836563733*^9}, {3.616796572023838*^9, 3.616796581224362*^9}},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["BBO - lens 1\n", "Section"],
+ Cell[BoxData[
+  GraphicsBox[{
+    {EdgeForm[{RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], 
+     AbsoluteThickness[1], JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+     FaceForm[{RGBColor[0.666667, 1, 1], Opacity[1.]}], 
+     DiskBox[{0.9433053363483943, 0.4883120279354516}, \
+{0.31344086021505424`, 0.5177419354838706}]}, 
+    {EdgeForm[{GrayLevel[0.], Opacity[1.], AbsoluteThickness[1]}], EdgeForm[
+     None], FaceForm[{RGBColor[0.666667, 1, 1], Opacity[1.]}], 
+     RectangleBox[{0.9684418601073734, 1.014030027535496}, \
+{1.3469364837632876`, -0.06338932730321378}]}, 
+    {AbsoluteThickness[1], JoinForm[{"Miter", 12.15}], StrokeForm[{Hue[
+     0., 0., 0.08963564456123702], Opacity[1.]}], EdgeForm[{RGBColor[
+     0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+     LineBox[{{0.763440860215054, 0.9306451612903227}, {1.3215053763440863`, 
+      0.49838709677419357`}}]}, 
+    {Thickness[0.0035075187395256797`], JoinForm[{"Miter", 12.15}], 
+     StrokeForm[Hue[0., 1., 1.]], EdgeForm[RGBColor[0., 0., 0.]], EdgeForm[
+     None], LineBox[{{0.06774193548387097, 0.7025174944529783}, {
+      0.7592638544251449, 0.9304744837002898}}]}, 
+    {JoinForm[{"Miter", 12.15}], Arrowheads[0.017378008287493755`], EdgeForm[{
+     GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+     ArrowBox[{{0.06989247311827959, 0.5016129032258064}, {
+      0.06881720430107528, 0.7037634408602147}}]}, 
+    {JoinForm[{"Miter", 12.15}], Arrowheads[0.018879913490962935`], EdgeForm[{
+     GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+     ArrowBox[{{0.7645464084305222, 0.49722181676640853`}, {
+      0.7597064930873844, 0.9327056877341502}}]}, 
+    {AbsolutePointSize[10.592537251772887`], 
+     PointBox[{1.3161290322580648`, 0.49946236559139734`}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.7612903225806453, 0.9306451612903223}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.06989247311827959, 0.701612903225806}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.0709677419354839, 0.5026881720430104}]}, 
+    {AbsoluteThickness[1], StrokeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], 
+     EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+     LineBox[{{0.06774193548387097, 0.7048387096774194}, {1.3086021505376344`,
+       0.5037634408602147}}]}, 
+    {AbsoluteThickness[1], StrokeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], 
+     EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+     LineBox[{{0.07096774193548389, 0.7037634408602148}, {0.7623655913978498, 
+      0.7102150537634403}}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.763440860215054, 0.7091397849462362}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.7666666666666668, 0.49838709677419313`}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.763440860215054, 0.5908602150537634}]}, 
+    StyleBox[InsetBox[
+      StyleBox[Cell["A",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       Background->GrayLevel[
+        1.]], {0.07096774193548389, 0.7360215053763441}, {Left, Baseline},
+      Alignment->{Left, Top}],
+     FontSize->23], 
+    InsetBox["", {0.7505376344086023, 0.9521505376344087}, {Left, Baseline},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["B",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->20,
+      Background->GrayLevel[1.]], {0.720430107526882, 0.9575268817204302}, {
+     Left, Baseline},
+     Alignment->{Left, Top}], 
+    InsetBox["", {1.2795698924731185`, 0.5768817204301075}, {Left, Baseline},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["C",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->20,
+      Background->GrayLevel[1.]], {1.3010752688172045`, 0.4822580645161292}, {
+     Left, Baseline},
+     Alignment->{Left, Top}], 
+    InsetBox["", {0.7591397849462367, 0.47150537634408607`}, {Left, Baseline},
+     
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["D",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->20,
+      Background->GrayLevel[1.]], {0.04838709677419356, 0.477956989247312}, {
+     Left, Baseline},
+     Alignment->{Left, Top}], 
+    StyleBox[
+     InsetBox["\[Theta]0", {0.19569892473118283`, 0.7220430107526876}, {
+      Left, Baseline},
+      Alignment->{Left, Top}],
+     FontSize->24], InsetBox[
+     StyleBox[
+      TagBox["\[Alpha]",
+       "RawBoxes"],
+      FontSize->24,
+      Background->GrayLevel[
+       1.]], {0.20860215053763442`, 0.6844086021505372}, {Left, Baseline},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["\[Gamma]",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->GrayLevel[1.]], {0.7387096774193549, 0.9048387096774193}, {
+     Left, Baseline},
+     Alignment->{Left, Top}], 
+    InsetBox["", {1.1935483870967745`, 0.5564516129032259}, {Left, Baseline},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["\[Beta]",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->GrayLevel[1.]], {1.2333333333333336`, 0.5403225806451615}, {
+     Left, Baseline},
+     Alignment->{Left, Top}], 
+    LineBox[{{0.00965891828487185, 0.5005858836503989}, {1.3859917472492804`, 
+     0.4988764819409972}}], 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+     GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+     FaceForm[{RGBColor[0.666667, 1, 1], Opacity[1.]}], 
+     ArrowBox[{{0.06703096539162115, 0.36739526411657575`}, {
+      0.6222222222222223, 0.36739526411657575`}}]}, InsetBox[
+     StyleBox[Cell["d",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->GrayLevel[1.]], {0.371584699453552, 0.38779599271402565`}, {
+     Left, Baseline},
+     Alignment->{Left, Top}], 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+     RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.666667, 1, 1], Opacity[1.]}], 
+     ArrowBox[{{0.6274750025548956, 0.42780798710471923`}, {
+      0.7653251243325699, 0.42643304104436575`}}]}, InsetBox[
+     StyleBox[Cell["z1",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->GrayLevel[1.]], {0.6688524590163935, 0.451912568306011}, {
+     Left, Baseline},
+     Alignment->{Left, Top}], 
+    {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+     0., 0., 0.], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+     1.]}], EdgeForm[None], 
+     LineBox[{{0.6270733012306047, 1.029695024077046}, {
+      0.6249331193151417, -0.2008285974578123}}]}, 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+     RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.666667, 1, 1], Opacity[1.]}], 
+     ArrowBox[{{0.6283199986961733, 0.25442477876106173`}, {1.325923561832102,
+       0.2588495575221236}}]}, InsetBox[
+     StyleBox[Cell["R1",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->GrayLevel[
+       1.]], {1.0058997050147496`, 0.27359882005899705`}, {Left, Baseline},
+     Alignment->{Left, Top}], 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+     0., 0., 0.08963564456123702], Opacity[1.]}], EdgeForm[{Hue[
+     0., 0., 0.08963149462119478], Opacity[1.], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.666667, 1, 1], Opacity[1.]}], 
+     ArrowBox[{{1.2536873156342194`, 0.9343657817109154}, {
+      1.2625368731563438`, 0.49926253687315714`}}]}, InsetBox[
+     StyleBox[Cell["\[Omega]1",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->GrayLevel[1.]], {1.1946902654867262`, 0.7794985250737465}, {
+     Left, Baseline},
+     Alignment->{Left, Top}], 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+     0., 0., 0.08963564456123702], Opacity[1.]}], EdgeForm[{Hue[
+     0., 0., 0.08963149462119478], Opacity[1.], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.666667, 1, 1], Opacity[1.]}], 
+     ArrowBox[{{0.017699115044247787`, 0.7101769911504426}, {
+      0.017699115044247794`, 0.4992625368731566}}]}, InsetBox[
+     StyleBox[Cell["\[Omega]0",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->GrayLevel[
+       1.]], {0.025073746312684372`, 0.6010324483775813}, {Left, Baseline},
+     Alignment->{Left, Top}], 
+    {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+     0., 0., 0.], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+     1.]}], EdgeForm[None], 
+     LineBox[{{0.7636853230885278, 1.0973179748967175`}, {
+      0.7615451411730648, -0.13320564663813983`}}]}, InsetBox[
+     StyleBox[Cell["x1",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.6599904625655701, 0.5000000000000001}, {
+     Left, Top}, {0.07439198855507856, Automatic},
+     Alignment->{Left, Top}]},
+   ContentSelectable->True,
+   ImagePadding->{{0., 0.}, {0., 0.}},
+   ImageSize->{699., 526.},
+   PlotRange->{{0., 1.3333333333333335`}, {0., 1.}},
+   PlotRangePadding->Automatic]]],
+ "\n"
+}], "Text",
+ CellGroupingRules->{GroupTogetherGrouping, 10001.},
+ CellChangeTimes->{{3.616576330338043*^9, 3.616576345141844*^9}, {
+   3.6165764738814497`*^9, 3.616576844755604*^9}, {3.616576876989402*^9, 
+   3.616576882443081*^9}, {3.616577081066424*^9, 3.616577316686984*^9}, {
+   3.616577367599122*^9, 3.616577743788089*^9}, {3.616577820852386*^9, 
+   3.6165782859623957`*^9}, {3.6165783204783173`*^9, 3.616578554040002*^9}, {
+   3.616578588083599*^9, 3.616578753235053*^9}, {3.6165814873419333`*^9, 
+   3.616581570778516*^9}, {3.616581610700315*^9, 3.6165816173895063`*^9}, {
+   3.6165836802307158`*^9, 3.616583685487557*^9}, 3.616584485242084*^9, {
+   3.6165845163019857`*^9, 3.6165845367103777`*^9}, {3.616669776928928*^9, 
+   3.616669778554562*^9}, {3.616733908173586*^9, 3.6167339175014763`*^9}, {
+   3.616735090480538*^9, 3.616735150417468*^9}},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"AC", "=", 
+   RowBox[{"Sqrt", "[", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", "\[Omega]0", ")"}], "^", "2"}], ")"}], "+", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Abs", "[", "R1", "]"}], "+", "d"}], ")"}], "^", "2"}], 
+      ")"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Alpha]", "=", 
+   RowBox[{"ArcTan", "[", 
+    RowBox[{"\[Omega]0", "/", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Abs", "[", "R1", "]"}], "+", "d"}], ")"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"sin\[Gamma]", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"AC", "*", 
+      RowBox[{"Sin", "[", 
+       RowBox[{"\[Theta]0", "+", "\[Alpha]"}], "]"}]}], ")"}], "/", 
+    RowBox[{"Abs", "[", "R1", "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Gamma]", "=", 
+   RowBox[{"Pi", "-", 
+    RowBox[{"ArcSin", "[", "sin\[Gamma]", "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Beta]", "=", 
+   RowBox[{"Pi", "-", 
+    RowBox[{"(", 
+     RowBox[{"\[Theta]0", "+", "\[Alpha]"}], ")"}], "-", "\[Gamma]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x1", "=", 
+   RowBox[{
+    RowBox[{"Abs", "[", "R1", "]"}], "*", 
+    RowBox[{"(", 
+     RowBox[{"1", "-", 
+      RowBox[{"Cos", "[", "\[Beta]", "]"}]}], ")"}]}]}], ";"}]}], "Input",
+ CellGroupingRules->{GroupTogetherGrouping, 10001.},
+ CellChangeTimes->{{3.616581632768587*^9, 3.6165817139570847`*^9}, {
+   3.61658181094452*^9, 3.6165822509357224`*^9}, 3.616582817013805*^9, 
+   3.616584485242469*^9, {3.616584516302306*^9, 3.616584536710479*^9}, {
+   3.616671963669074*^9, 3.6166719842123623`*^9}, {3.616672280070706*^9, 
+   3.6166722803463783`*^9}, {3.616672644266665*^9, 3.616672708555299*^9}, {
+   3.616672844110611*^9, 3.616672848221899*^9}, {3.616672911336474*^9, 
+   3.616672918073311*^9}, 3.616673115165959*^9, {3.616673196044044*^9, 
+   3.616673232093642*^9}, {3.616673314136339*^9, 3.61667335452894*^9}, 
+   3.616673783510458*^9, 3.6166740582180843`*^9, {3.616674193985003*^9, 
+   3.616674270073545*^9}, {3.616674308348103*^9, 3.616674338980583*^9}, {
+   3.6166748287056007`*^9, 3.616674846281704*^9}, {3.616674887312813*^9, 
+   3.616674901555874*^9}, {3.616733908177225*^9, 3.6167339175022593`*^9}, {
+   3.6167350842404833`*^9, 3.616735084407576*^9}, {3.616736597734981*^9, 
+   3.6167366023711033`*^9}, 3.616736644706231*^9},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"The", " ", "ABCD", " ", "matrix", " ", "from", " ", "BBO"}], 
+     " ", "-", "  ", 
+     RowBox[{"lens", " ", "1"}]}], "*)"}], "Subsubsection"], "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"\[Omega]1"},
+        {"\[Theta]1"}
+       }], "\[NoBreak]", ")"}], "=", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"nair", "-", "n1"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"n1", "*", "R1"}], ")"}]}], 
+          RowBox[{"nair", "/", "n1"}]}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"(", 
+           RowBox[{"d", "+", "z1"}], ")"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"\[Omega]0"},
+         {"\[Theta]0"}
+        }], "\[NoBreak]", ")"}]}]}], ";"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"img1", "=", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"nair", "-", "n1"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"n1", "*", "R1"}], ")"}]}], ",", 
+          RowBox[{"(", 
+           RowBox[{"nair", "/", "n1"}], ")"}]}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", 
+          RowBox[{"(", 
+           RowBox[{"d", "+", "x1"}], ")"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"\[Omega]0", ",", "\[Theta]0"}], "}"}]}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\[Omega]1", "=", 
+     RowBox[{"img1", "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"\[Theta]1", "=", 
+     RowBox[{"img1", "[", 
+      RowBox[{"[", "2", "]"}], "]"}]}], ";"}], "*)"}], "\[IndentingNewLine]", 
+  
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", 
+         RowBox[{"(", 
+          RowBox[{"d", "+", "x1"}], ")"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ".", 
+     RowBox[{"{", 
+      RowBox[{"\[Omega]0", ",", "\[Theta]0"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "0"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"nair", "-", "n1"}], ")"}], "/", 
+         RowBox[{"(", 
+          RowBox[{"n1", "*", "R1"}], ")"}]}], ",", 
+        RowBox[{"(", 
+         RowBox[{"nair", "/", "n1"}], ")"}]}], "}"}]}], "}"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"T1air", "=", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{"(", 
+         RowBox[{"d", "+", "x1"}], ")"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "\[IndentingNewLine]", 
+   RowBox[{"A1air", "=", 
+    RowBox[{"T1air", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"B1air", "=", 
+    RowBox[{"T1air", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "2"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"C1air", "=", 
+    RowBox[{"T1air", "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ",", "1"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"D1air", "=", 
+    RowBox[{"T1air", "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ",", "2"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"q0", "=", 
+     RowBox[{"0", "-", 
+      RowBox[{"\[ImaginaryI]", 
+       RowBox[{"(", "z0", ")"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"q1air", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"A1air", "*", "q0"}], ")"}], "+", "B1air"}], ")"}], "/", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"C1air", "*", "q0"}], ")"}], "+", "D1air"}], ")"}]}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"z1air", "=", 
+     RowBox[{"Abs", "[", 
+      RowBox[{"Re", "[", "q1air", "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"z01air", "=", 
+     RowBox[{"Abs", " ", "[", 
+      RowBox[{"Im", "[", "q1air", "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"\[Omega]01air", "=", 
+     RowBox[{"Sqrt", "[", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"\[Lambda]", "*", 
+           RowBox[{"10", "^", 
+            RowBox[{"-", "6"}]}]}], ")"}], "*", "z01air"}], ")"}], "/", 
+       "Pi"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"\[Omega]1air", "=", 
+     RowBox[{"Sqrt", "[", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"\[Omega]01air", "^", "2"}], ")"}], "*", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"z1air", "/", "z01air"}], ")"}], "^", "2"}], ")"}]}], 
+        ")"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"\[Theta]1air", "=", 
+     RowBox[{"\[Omega]01air", "/", "z01air"}]}], ";"}]}]}]], "Input",
+ CellGroupingRules->{GroupTogetherGrouping, 10001.},
+ CellChangeTimes->{
+  3.616585695575221*^9, 3.6165858382940083`*^9, {3.616671920180786*^9, 
+   3.616671943358243*^9}, {3.616711616267651*^9, 3.616711623058023*^9}, 
+   3.616711660685047*^9, {3.616712059380147*^9, 3.616712171328024*^9}, {
+   3.616712230693577*^9, 3.6167122336939993`*^9}, {3.616712355794149*^9, 
+   3.616712468769101*^9}, {3.616712589996728*^9, 3.616712743796699*^9}, {
+   3.616713701124576*^9, 3.616713716527854*^9}, 3.616713988496648*^9, {
+   3.616714069106927*^9, 3.616714076799986*^9}, 3.616733917502915*^9, {
+   3.616735272688097*^9, 3.6167352859308033`*^9}, {3.6167355508891897`*^9, 
+   3.616735558221949*^9}, {3.616735931444035*^9, 3.616736074884029*^9}, {
+   3.616736619529956*^9, 3.6167366320168457`*^9}, {3.616736898774528*^9, 
+   3.6167369173658657`*^9}, {3.616737572195146*^9, 3.616737582540825*^9}, {
+   3.6167379015355253`*^9, 3.616737924861516*^9}, {3.6167380669553633`*^9, 
+   3.6167380734823*^9}, {3.616738296440405*^9, 3.61673831164361*^9}, {
+   3.6167953511476707`*^9, 3.616795361051724*^9}},
+ Background->RGBColor[1, 0.85, 0.85]]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"T1lens", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"1", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"nair", "-", "n1"}], ")"}], "/", 
+        RowBox[{"(", 
+         RowBox[{"n1", "*", "R1"}], ")"}]}], ",", 
+       RowBox[{"(", 
+        RowBox[{"nair", "/", "n1"}], ")"}]}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"A1lens", "=", 
+  RowBox[{"T1lens", "[", 
+   RowBox[{"[", 
+    RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"B1lens", "=", 
+  RowBox[{"T1lens", "[", 
+   RowBox[{"[", 
+    RowBox[{"1", ",", "2"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"C1lens", "=", 
+  RowBox[{"T1lens", "[", 
+   RowBox[{"[", 
+    RowBox[{"2", ",", "1"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"D1lens", "=", 
+  RowBox[{"T1lens", "[", 
+   RowBox[{"[", 
+    RowBox[{"2", ",", "2"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"q1lens", "=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"A1lens", "*", "q1air"}], ")"}], "+", "B1lens"}], ")"}], "/", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"C1lens", "*", "q1air"}], ")"}], "+", "D1lens"}], 
+    ")"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"z1lens", "=", 
+  RowBox[{"Abs", "[", 
+   RowBox[{"Re", "[", "q1lens", "]"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"z01lens", "=", 
+  RowBox[{"Abs", " ", "[", 
+   RowBox[{"Im", "[", "q1lens", "]"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"\[Omega]01lens", "=", 
+  RowBox[{"Sqrt", "[", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"\[Lambda]", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "6"}]}]}], ")"}], "*", "z01lens"}], ")"}], "/", "Pi"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"\[Omega]1lens", "=", 
+  RowBox[{"Sqrt", "[", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"\[Omega]01lens", "^", "2"}], ")"}], "*", 
+    RowBox[{"(", 
+     RowBox[{"1", "+", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"z1lens", "/", "z01lens"}], ")"}], "^", "2"}], ")"}]}], 
+     ")"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"\[Theta]1lens", "=", 
+  RowBox[{
+  "\[Omega]01lens", "/", "z01lens"}]}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.616737949520297*^9, 3.616737968919626*^9}, {
+   3.616738056267726*^9, 3.616738058900279*^9}, {3.6167381041983547`*^9, 
+   3.6167382637995033`*^9}, {3.616738319179019*^9, 3.616738348755211*^9}, {
+   3.616749302794301*^9, 3.6167493100795717`*^9}, 3.616795379292572*^9},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["lens 1 - lens 2\n", "Section"],
+ Cell[BoxData[
+  RowBox[{
+   GraphicsBox[{
+     {EdgeForm[{RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], 
+      AbsoluteThickness[1], JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+      FaceForm[{RGBColor[0.831373, 0.882353, 1], Opacity[1.]}], 
+      RectangleBox[{0.942857142857143, 0.9923809523809526}, \
+{1.5466666666666669`, -0.15238095238095228`}]}, 
+     {EdgeForm[{RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], 
+      AbsoluteThickness[1], JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+      FaceForm[{RGBColor[0.666667, 1, 1], Opacity[1.]}], 
+      DiskBox[{0.743918583851372, 0.5007482776331391}, \
+{0.5135741333319621, 0.5474029524330235}]}, 
+     {EdgeForm[{RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], 
+      AbsoluteThickness[1], JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+      FaceForm[{RGBColor[0.666667, 1, 1], Opacity[1.]}], 
+      DiskBox[{0.4342013963278656, 0.5137219511340443}, \
+{0.313440860215054, 0.5862698505196762}]}, 
+     {AbsoluteThickness[1], JoinForm[{"Miter", 12.15}], StrokeForm[{Hue[
+      0., 0., 0.08963564456123702], Opacity[1.]}], EdgeForm[{RGBColor[
+      0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+      LineBox[{{0.06462949676786875, 0.5071708168136344}, {1.161974946524986, 
+       0.8157199121135444}}]}, 
+     {Thickness[0.0035075187395256797`], JoinForm[{"Miter", 12.15}], 
+      StrokeForm[Hue[0., 1., 1.]], EdgeForm[RGBColor[0., 0., 0.]], EdgeForm[
+      None], LineBox[{{0.2188265028873415, 0.9315727535570018}, {
+       1.1626660690191082`, 0.8180203817242455}}]}, 
+     {JoinForm[{"Miter", 12.15}], Arrowheads[0.017378008287493755`], 
+      EdgeForm[{GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], 
+      JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+      ArrowBox[{{0.2210224166211045, 0.4919475792463811}, {
+       0.21994714780390018`, 0.9329733192721205}}]}, 
+     {JoinForm[{"Miter", 12.15}], Arrowheads[0.018879913490962935`], 
+      EdgeForm[{GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], 
+      JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+      ArrowBox[{{1.164818289193937, 0.49742295900333044`}, {1.163044814071841,
+        0.8177106418810538}}]}, 
+     {AbsolutePointSize[10.232929922807546`], 
+      PointBox[{0.2234986123751419, 0.8191857394860728}]}, 
+     {AbsolutePointSize[10.232929922807546`], 
+      PointBox[{0.06678801361782456, 0.5054746575881165}]}, 
+     {AbsoluteThickness[1], StrokeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], 
+      EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+      LineBox[{{0.2180011748061546, 0.8218399638283802}, {1.1566541320971049`,
+        0.8162930598610091}}]}, 
+     {AbsoluteThickness[1], StrokeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], 
+      EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+      LineBox[{{0.06297963735492136, 0.5027913570791638}, {0.2132230332139466,
+        0.9325868737549243}}]}, 
+     {AbsolutePointSize[10.232929922807546`], 
+      PointBox[{0.2214694216918912, 0.9334518713272881}]}, 
+     {AbsolutePointSize[10.232929922807546`], 
+      PointBox[{1.1623476140717521`, 0.817439691688857}]}, 
+     {AbsolutePointSize[10.232929922807546`], 
+      PointBox[{0.2214694216918912, 0.5002994348378107}]}, 
+     InsetBox["", {1.2795698924731185`, 0.5768817204301075}, {Left, Baseline},
+      
+      Alignment->{Left, Top}], 
+     InsetBox["", {0.7591397849462367, 0.47150537634408607`}, {Left, Baseline},
+      Alignment->{Left, Top}], 
+     LineBox[{{-0.033250567276678175`, 0.5019791264229523}, {
+      1.3430822616877303`, 0.5002697247135506}}], 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+      Arrowheads[{{-0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+      RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], AbsoluteThickness[1],
+       JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+      0.666667, 1, 1], Opacity[1.]}], 
+      ArrowBox[{{0.12312257095003716`, 0.4027296171987632}, {
+       0.22178790183395164`, 0.4013546711384097}}]}, 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0., 0., 0.], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.1241126603389292, 1.078458521116405}, {
+       0.12197247842346626`, -0.1520651004184532}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+      Arrowheads[{{-0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+      RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], AbsoluteThickness[1],
+       JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+      0.666667, 1, 1], Opacity[1.]}], 
+      ArrowBox[{{0.06338459591754153, 0.2084477672668088}, {1.257610315049149,
+        0.21287254602787065`}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+      Arrowheads[{{-0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0., 0., 0.08963564456123702], Opacity[1.]}], EdgeForm[{Hue[
+      0., 0., 0.08963149462119478], Opacity[1.], AbsoluteThickness[1], 
+      JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+      0.666667, 1, 1], Opacity[1.]}], 
+      ArrowBox[{{1.2808836546443851`, 0.8271341315223815}, {1.284104031185538,
+        0.5005855797552436}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+      Arrowheads[{{-0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{Hue[
+      0., 0., 0.08963564456123702], Opacity[1.]}], EdgeForm[{Hue[
+      0., 0., 0.08963149462119478], Opacity[1.], AbsoluteThickness[1], 
+      JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+      0.666667, 1, 1], Opacity[1.]}], 
+      ArrowBox[{{0.017699115044247787`, 0.9247363781236226}, {
+       0.017699115044247794`, 0.49959021879759}}]}, 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0., 0., 0.], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{1.1655616328223846`, 1.0742787927987456`}, {
+       1.1634214509069216`, -0.15624482873611265`}}]}, 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0., 0., 0.], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{1.2603021413559967`, 1.0046166541710895`}, {
+       1.2581619594405338`, -0.2259069673637688}}]}, 
+     {AbsoluteThickness[1], Dashing[{0, Small}], StrokeForm[{RGBColor[
+      0., 0., 0.], Opacity[1.]}], EdgeForm[{RGBColor[0., 0., 0.], Opacity[
+      1.]}], EdgeForm[None], 
+      LineBox[{{0.22233627580392407`, 1.1146828332027863`}, {
+       0.22019609388846112`, -0.11584078833207209`}}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+      Arrowheads[{{-0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+      RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], AbsoluteThickness[1],
+       JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+      0.666667, 1, 1], Opacity[1.]}], 
+      ArrowBox[{{1.1652595952874596`, 0.3655429240925244}, {
+       1.2583682272596435`, 0.36416797803217094`}}]}, InsetBox[
+      StyleBox[Cell["R2",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.6297457331940092, 0.23249738766980144`}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["z1",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.14629049111807735`, 0.42894461859979105`}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["z2",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {1.2009752699407874`, 0.37460815047021956`}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["\[Omega]2",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {1.1758969000348312`, 0.6448972483455243}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], 
+     InsetBox["", {0.23824451410658315`, 0.6866945315221178}, {Left, Baseline},
+      Alignment->{Left, Top}], 
+     InsetBox["", {0.044583768721699765`, 0.7117729014280739}, {Left, Top}, {
+      0.012539184952978066`, Automatic},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["\[Omega]1",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.01950539881574366, 0.7270985719261582}, {
+      Left, Top}, {0.11006617903169628`, Automatic},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["E",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.06687565308254965, 0.4902473005921283}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["F",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.16161616161616166`, 0.9514106583072102}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["G",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {1.1800766283524906`, 0.8371647509578544}, {
+      Left, Top}, {0.02925809822361547, Automatic},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["K",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.24381748519679564`, 0.47770811563915005`}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["J",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.23685127133403, 0.5863810518982933}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["I",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.23824451410658315`, 0.7870080111459422}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["H",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {1.1215604319052597`, 0.4582027168234064}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], 
+     {AbsolutePointSize[10.232929922807546`], 
+      PointBox[{0.22291884360849887`, 0.5543364681295713}]}, 
+     {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+      Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+      Arrowheads[{{-0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+          GraphicsBox[{
+            EdgeForm[None], 
+            Dashing[{}], 
+            
+            LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+               0, -0.5}}}]}], 0}}}], StrokeForm[{RGBColor[0., 0., 0.], 
+      Opacity[1.]}], EdgeForm[{RGBColor[0.6666666666666666, 1., 1.], Opacity[
+      1.], AbsoluteThickness[1], JoinForm[{"Miter", 12.15}]}], EdgeForm[None],
+       FaceForm[{RGBColor[0.666667, 1, 1], Opacity[1.]}], 
+      ArrowBox[{{0.12260774183940501`, 0.14516885787805642`}, {
+       1.2553116822417394`, 0.1387043570296415}}]}, InsetBox[
+      StyleBox[Cell["tc1",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.7021943573667713, 0.15447579240682685`}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["\[Delta]",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.19809523809523813`, 0.8057142857142859}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["\[Epsilon]",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.9504761904761906, 0.7771428571428574}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["\[Theta]1",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->20,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {0.8114285714285716, 0.8361904761904764}, {
+      Left, Baseline},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["x1",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->24,
+       Background->RGBColor[
+        1., 0.8500038147554742, 
+         0.8500038147554742]], {0.14083333333333342`, 0.45833333333333337`}, {
+      Left, Top}, {0.06000000000000005, Automatic},
+      Alignment->{Left, Top}], InsetBox[
+      StyleBox[Cell["x2",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       FontSize->24,
+       Background->RGBColor[
+        0.9647058823529412, 0.9294117647058824, 
+         0.8392156862745098]], {1.1908333333333334`, 0.4133333333333332}, {
+      Left, Top}, {0.05666666666666664, Automatic},
+      Alignment->{Left, Top}]},
+    ContentSelectable->True,
+    ImagePadding->{{0., 0.}, {0., 0.}},
+    ImageSize->{801., 600.},
+    PlotRange->{{0., 1.3333333333333335`}, {0., 1.}},
+    PlotRangePadding->Automatic], " "}]]],
+ " \n"
+}], "Text",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ CellChangeTimes->{{3.616581593640245*^9, 3.616581610700585*^9}, {
+   3.616582869159782*^9, 3.616582898140025*^9}, {3.616582958921801*^9, 
+   3.6165835727351*^9}, {3.616583697445841*^9, 3.6165844280385237`*^9}, 
+   3.616584485247401*^9, 3.616584516302766*^9, {3.616584630271975*^9, 
+   3.616584671268981*^9}, 3.616585909460663*^9, {3.61658682552813*^9, 
+   3.616587007781022*^9}, {3.616587156513295*^9, 3.616587195697919*^9}, 
+   3.6165884904773283`*^9, {3.616735166559909*^9, 3.6167351937198553`*^9}},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"EK", "=", 
+   RowBox[{
+    RowBox[{"Abs", "[", "R2", "]"}], "-", "tc1", "+", "x1"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Delta]", "=", 
+   RowBox[{"ArcTan", "[", 
+    RowBox[{"EK", "/", "\[Omega]1lens"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EF", "=", 
+   RowBox[{"Sqrt", "[", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"\[Omega]1lens", "^", "2"}], ")"}], "+", 
+     RowBox[{"(", 
+      RowBox[{"EK", "^", "2"}], ")"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"sin\[Theta]1\[Epsilon]", "=", 
+   RowBox[{
+    RowBox[{"Sin", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"Pi", "/", "2"}], ")"}], "+", "\[Delta]", "-", 
+      RowBox[{"Abs", "[", "\[Theta]1lens", "]"}]}], "]"}], "*", 
+    RowBox[{"EF", "/", 
+     RowBox[{"Abs", "[", "R2", "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"\[Epsilon]", "=", 
+  RowBox[{
+   RowBox[{"-", 
+    RowBox[{"Abs", "[", "\[Theta]1lens", "]"}]}], "+", 
+   RowBox[{
+   "ArcSin", "[", "sin\[Theta]1\[Epsilon]", 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"t1", "=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{"\[Omega]1lens", "-", 
+     RowBox[{"(", 
+      RowBox[{"EK", "*", 
+       RowBox[{"Tan", "[", "\[Epsilon]", "]"}]}], ")"}]}], ")"}], "/", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Tan", "[", "\[Epsilon]", "]"}], "+", 
+     RowBox[{"Tan", "[", 
+      RowBox[{"Abs", "[", "\[Theta]1lens", "]"}], "]"}]}], 
+    ")"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"x2", "=", 
+  RowBox[{
+   RowBox[{"Abs", "[", "R2", "]"}], "*", 
+   RowBox[{"(", 
+    RowBox[{"1", "-", 
+     RowBox[{"Cos", "[", "\[Epsilon]", "]"}]}], 
+    ")"}]}]}], "\[IndentingNewLine]"}], "Input",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ CellChangeTimes->{{3.616584554160907*^9, 3.6165846018959713`*^9}, {
+   3.61658469102773*^9, 3.616584754007359*^9}, {3.616584849357608*^9, 
+   3.616584861296406*^9}, {3.616584896371533*^9, 3.616585095373378*^9}, 
+   3.616585217557601*^9, {3.616585296561927*^9, 3.616585346615149*^9}, {
+   3.616585514380084*^9, 3.61658558706708*^9}, 3.616585909460805*^9, {
+   3.61664853761097*^9, 3.616648540752277*^9}, 3.616712994241292*^9, 
+   3.6167131555614023`*^9, {3.616713244070064*^9, 3.616713249527931*^9}, {
+   3.616713341592853*^9, 3.616713400398271*^9}, {3.616713472255563*^9, 
+   3.616713501138856*^9}, {3.616713598196616*^9, 3.616713691137748*^9}, {
+   3.6167137299479847`*^9, 3.616713823080204*^9}, {3.616713886926736*^9, 
+   3.6167139140521812`*^9}, {3.616735293747335*^9, 3.616735299392617*^9}, 
+   3.616736870749322*^9, 3.616737237798801*^9, {3.6167387566609993`*^9, 
+   3.6167387887175627`*^9}, {3.616738956920557*^9, 3.616738972805059*^9}, 
+   3.616739082163534*^9},
+ Background->RGBColor[1, 0.85, 0.85]]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"The", " ", "ABCD", " ", "matrix", " ", "from", " ", "BBO"}], 
+     " ", "-", "  ", 
+     RowBox[{"lens", " ", "1"}], " ", "-", 
+     RowBox[{"lens", " ", "2"}]}], "*)"}], "Subsubsection"], "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"\[Omega]1"},
+        {"\[Theta]1"}
+       }], "\[NoBreak]", ")"}], "=", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"n1", "-", "n2"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"n2", "*", "R2"}], ")"}]}], 
+          RowBox[{"n1", "/", "n2"}]}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "t1"},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"nair", "-", "n1"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"n1", "*", "R1"}], ")"}]}], 
+          RowBox[{"nair", "/", "n1"}]}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"(", 
+           RowBox[{"d", "+", "z1"}], ")"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"\[Omega]0"},
+         {"\[Theta]0"}
+        }], "\[NoBreak]", ")"}]}]}], ";"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"img2", "=", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"n1", "-", "n2"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"n2", "*", "R2"}], ")"}]}], ",", 
+          RowBox[{"(", 
+           RowBox[{"n1", "/", "n2"}], ")"}]}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "t1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"nair", "-", "n1"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"n1", "*", "R1"}], ")"}]}], ",", 
+          RowBox[{"(", 
+           RowBox[{"nair", "/", "n1"}], ")"}]}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", 
+          RowBox[{"(", 
+           RowBox[{"d", "+", "x1"}], ")"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"\[Omega]0", ",", "\[Theta]0"}], "}"}]}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\[Omega]2", "=", 
+     RowBox[{"img2", "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"\[Theta]2", "=", 
+     RowBox[{"img2", "[", 
+      RowBox[{"[", "2", "]"}], "]"}]}], ";"}], "*)"}], "\[IndentingNewLine]", 
+  
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", 
+         RowBox[{"(", 
+          RowBox[{"d", "+", "x1"}], ")"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ".", 
+     RowBox[{"{", 
+      RowBox[{"\[Omega]0", ",", "\[Theta]0"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "0"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"nair", "-", "n1"}], ")"}], "/", 
+         RowBox[{"(", 
+          RowBox[{"n1", "*", "R1"}], ")"}]}], ",", 
+        RowBox[{"(", 
+         RowBox[{"nair", "/", "n1"}], ")"}]}], "}"}]}], "}"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "t1"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ";"}], "\[IndentingNewLine]", 
+   
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "0"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"n1", "-", "n2"}], ")"}], "/", 
+         RowBox[{"(", 
+          RowBox[{"n2", "*", "R2"}], ")"}]}], ",", 
+        RowBox[{"(", 
+         RowBox[{"n1", "/", "n2"}], ")"}]}], "}"}]}], "}"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"T2lens1", "=", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "t1"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"A2lens1", "=", 
+    RowBox[{"T2lens1", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"B2lens1", "=", 
+    RowBox[{"T2lens1", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "2"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"C2lens1", "=", 
+    RowBox[{"T2lens1", "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ",", "1"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"D2lens1", "=", 
+    RowBox[{"T2lens1", "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ",", "2"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"q2lens1", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"A2lens1", "*", "q1lens"}], ")"}], "+", "B2lens1"}], ")"}], 
+     "/", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"C2lens1", "*", "q1lens"}], ")"}], "+", "D2lens1"}], 
+      ")"}]}]}], "\[IndentingNewLine]", 
+   RowBox[{"z2lens1", "=", 
+    RowBox[{"Abs", "[", 
+     RowBox[{"Re", "[", "q2lens1", "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"z02lens1", "=", 
+    RowBox[{"Abs", " ", "[", 
+     RowBox[{"Im", "[", "q2lens1", "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"\[Omega]02lens1", "=", 
+    RowBox[{"Sqrt", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"\[Lambda]", "*", 
+          RowBox[{"10", "^", 
+           RowBox[{"-", "6"}]}]}], ")"}], "*", "z02lens1"}], ")"}], "/", 
+      "Pi"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"\[Omega]2lens1", "=", 
+    RowBox[{"Sqrt", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"\[Omega]02lens1", "^", "2"}], ")"}], "*", 
+      RowBox[{"(", 
+       RowBox[{"1", "+", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"z2lens1", "/", "z02lens1"}], ")"}], "^", "2"}], ")"}]}], 
+       ")"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"\[Theta]2lens1", "=", 
+    RowBox[{"\[Omega]02lens1", "/", "z02lens1"}]}], 
+   "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.6167141108720007`*^9, 3.616714285714884*^9}, {
+  3.616717995557981*^9, 3.6167179985371113`*^9}, {3.616735307600898*^9, 
+  3.616735315750019*^9}, {3.616736829933776*^9, 3.616736863901235*^9}, {
+  3.616737252707346*^9, 3.616737312158826*^9}, {3.616737555433577*^9, 
+  3.6167375669385643`*^9}, {3.616737896138217*^9, 3.616737897685854*^9}, {
+  3.6167383709351273`*^9, 3.616738475292338*^9}, {3.6167954136294613`*^9, 
+  3.616795433621313*^9}},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"T2lens2", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"n1", "-", "n2"}], ")"}], "/", 
+          RowBox[{"(", 
+           RowBox[{"n2", "*", "R2"}], ")"}]}], ",", 
+         RowBox[{"(", 
+          RowBox[{"n1", "/", "n2"}], ")"}]}], "}"}]}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"A2lens2", "=", 
+    RowBox[{"T2lens2", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"B2lens2", "=", 
+    RowBox[{"T2lens2", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "2"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"C2lens2", "=", 
+    RowBox[{"T2lens2", "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ",", "1"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"D2lens2", "=", 
+    RowBox[{"T2lens2", "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ",", "2"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"q2lens2", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"A2lens2", "*", "q2lens1"}], ")"}], "+", "B2lens2"}], ")"}], 
+     "/", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"C2lens2", "*", "q2lens1"}], ")"}], "+", "D2lens2"}], 
+      ")"}]}]}], "\[IndentingNewLine]", 
+   RowBox[{"z2lens2", "=", 
+    RowBox[{"Abs", "[", 
+     RowBox[{"Re", "[", "q2lens2", "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"z02lens2", "=", 
+    RowBox[{"Abs", " ", "[", 
+     RowBox[{"Im", "[", "q2lens2", "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"\[Omega]02lens2", "=", 
+    RowBox[{"Sqrt", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"\[Lambda]", "*", 
+          RowBox[{"10", "^", 
+           RowBox[{"-", "6"}]}]}], ")"}], "*", "z02lens2"}], ")"}], "/", 
+      "Pi"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"\[Omega]2lens2", "=", 
+    RowBox[{"Sqrt", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"\[Omega]02lens2", "^", "2"}], ")"}], "*", 
+      RowBox[{"(", 
+       RowBox[{"1", "+", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"z2lens2", "/", "z02lens2"}], ")"}], "^", "2"}], ")"}]}], 
+       ")"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"\[Theta]2lens2", "=", 
+    RowBox[{"\[Omega]02lens2", "/", "z02lens2"}]}], 
+   "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.616753878344404*^9, 3.6167538960503397`*^9}, 
+   3.6167539289724903`*^9, {3.616753975185759*^9, 3.616754060672608*^9}, {
+   3.616754107893252*^9, 3.616754149018845*^9}, {3.616754208652587*^9, 
+   3.6167542202251053`*^9}, {3.616754324672257*^9, 3.616754369095582*^9}},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "lens 2 - air\n",
+ Cell[BoxData[
+  GraphicsBox[{
+    {EdgeForm[{RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], 
+     AbsoluteThickness[1], JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+     FaceForm[{RGBColor[0.831373, 0.882353, 1], Opacity[1.]}], 
+     DiskBox[{0.5510548523206746, 0.45189873417721427`}, \
+{0.6236286919831223, 0.6430379746835444}]}, 
+    {EdgeForm[{RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], 
+     AbsoluteThickness[1], JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+     FaceForm[{RGBColor[0.666667, 1, 1], Opacity[1.]}], 
+     DiskBox[{0.07341772151898739, 0.4898734177215184}, \
+{0.422784810126582, 0.5746835443037979}]}, 
+    {AbsoluteThickness[1], JoinForm[{"Miter", 12.15}], StrokeForm[Opacity[
+     1.]], EdgeForm[Opacity[1.]], EdgeForm[None], 
+     LineBox[{{0.006751054852320679, 0.4738396624472574}, {
+      1.3569620253164556`, 0.4772151898734177}}]}, 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+     GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.831373, 0.882353, 1], Opacity[1.]}], 
+     ArrowBox[{{0.04725738396624475, 0.978481012658228}, {0.04725738396624475,
+       0.4738396624472575}}]}, 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+     GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.831373, 0.882353, 1], Opacity[1.]}], 
+     ArrowBox[{{1.2207704337911818`, 0.8451022186690126}, {
+      1.2197358953227424`, 0.4808193334535713}}]}, 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           PolygonBox[{{-1, 0.5}, {0, 
+             0}, {-1, -0.5}, {-0.6, 0}, {-1, 0.5}}]}], 0.59}}}], StrokeForm[
+     Opacity[1.]], EdgeForm[{GrayLevel[0.], Opacity[1.], AbsoluteThickness[1],
+      JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.831373, 0.882353, 1], Opacity[1.]}], 
+     ArrowBox[{{0.2926641297353904, 0.4738448674074546}, {0.291302114990348, 
+      0.9852268625503506}}]}, 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           PolygonBox[{{-1, 0.5}, {0, 
+             0}, {-1, -0.5}, {-0.6, 0}, {-1, 0.5}}]}], 0.59}}}], StrokeForm[
+     Opacity[1.]], EdgeForm[{RGBColor[0.6666666666666666, 1., 1.], Opacity[
+     1.], AbsoluteThickness[1], JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+     FaceForm[{RGBColor[0.831373, 0.882353, 1], Opacity[1.]}], 
+     ArrowBox[{{1.0415626042071722`, 0.4687763713080182}, {
+      1.0438032151594148`, 0.8483998482416222}}]}, 
+    {AbsoluteThickness[3.3884415613920247`], JoinForm[{"Miter", 12.15}], 
+     StrokeForm[{RGBColor[1, 0, 0], Opacity[1.]}], EdgeForm[{RGBColor[
+     0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+     LineBox[{{0.2919831223628692, 0.9852320675105488}, {1.039662447257384, 
+      0.8468354430379754}}]}, 
+    {AbsoluteThickness[3.3884415613920247`], Dashing[{Medium, Medium}], 
+     JoinForm[{"Miter", 12.15}], StrokeForm[{RGBColor[1, 0, 0], Opacity[1.]}],
+      EdgeForm[{RGBColor[0., 0., 0.], Opacity[1.]}], EdgeForm[None], 
+     LineBox[{{1.041706431979884, 0.8442729237418984}, {1.3573182463258757`, 
+      0.7109395904085658}}]}, 
+    {AbsoluteThickness[1.717908387157588], JoinForm[{"Miter", 12.15}], 
+     StrokeForm[Opacity[1.]], EdgeForm[Opacity[1.]], EdgeForm[None], 
+     LineBox[{{0.2936708860759494, 0.8552742616033758}, {1.037974683544304, 
+      0.8383966244725746}}]}, 
+    {AbsoluteThickness[1.717908387157588], JoinForm[{"Miter", 12.15}], 
+     StrokeForm[Opacity[1.]], EdgeForm[Opacity[1.]], EdgeForm[None], 
+     LineBox[{{0.09620253164556965, 0.4721518987341774}, {1.0362869198312237`,
+       0.8383966244725745}}]}, 
+    {AbsoluteThickness[1.717908387157588], JoinForm[{"Miter", 12.15}], 
+     StrokeForm[Opacity[1.]], EdgeForm[Opacity[1.]], EdgeForm[None], 
+     LineBox[{{0.09461931966692805, 0.47215189873417773`}, {
+      0.2971509652365484, 0.9902561083308812}}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.09113924050632911, 0.47215189873417784`}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.2953586497890296, 0.9886075949367091}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     StyleBox[PointBox[{1.0415597780833967`, 0.822555596096813}],
+      FontSize->25]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.2919831223628692, 0.8603375527426163}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.2936708860759494, 0.5531645569620256}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{0.2886075949367089, 0.47721518987341793`}]}, 
+    {AbsolutePointSize[10.232929922807546`], 
+     PointBox[{1.037974683544304, 0.4738396624472576}]}, 
+    {AbsoluteThickness[1], Dashing[{0, Small}], JoinForm[{"Miter", 12.15}], 
+     StrokeForm[Opacity[1.]], EdgeForm[Opacity[1.]], EdgeForm[None], 
+     LineBox[{{0.09273323956868265, 0.9936708860759493}, {
+      0.09442100328176278, -0.01898734177215182}}]}, 
+    {AbsoluteThickness[1], Dashing[{0, Small}], JoinForm[{"Miter", 12.15}], 
+     StrokeForm[Opacity[1.]], EdgeForm[Opacity[1.]], EdgeForm[None], 
+     LineBox[{{0.29273323956868263`, 0.9371308016877637}, {
+      0.29442100328176274`, -0.0755274261603374}}]}, 
+    {AbsoluteThickness[1], Dashing[{0, Small}], JoinForm[{"Miter", 12.15}], 
+     StrokeForm[Opacity[1.]], EdgeForm[Opacity[1.]], EdgeForm[None], 
+     LineBox[{{1.0404125644631974`, 1.0215189873417723`}, {
+      1.0421003281762777`, 0.008860759493671114}}]}, 
+    {AbsoluteThickness[1], Dashing[{0, Small}], JoinForm[{"Miter", 12.15}], 
+     StrokeForm[Opacity[1.]], EdgeForm[Opacity[1.]], EdgeForm[None], 
+     LineBox[{{1.173745897796531, 0.99957805907173}, {
+      1.1754336615096108`, -0.013080168776371123`}}]}, 
+    {AbsoluteThickness[1], Dashing[{0, Small}], JoinForm[{"Miter", 12.15}], 
+     StrokeForm[Opacity[1.]], EdgeForm[Opacity[1.]], EdgeForm[None], 
+     LineBox[{{0.4952648851383029, 0.9978902953586501}, {
+      0.496952648851383, -0.014767932489451005`}}]}, 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, 
+        Mod[1 - Automatic, 1], {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+     GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], Dashing[{0, Small}], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.831373, 0.882353, 1], Opacity[1.]}], 
+     ArrowBox[{{0.09451476793248946, 0.16666666666666663`}, {
+      1.1746835443037975`, 0.159915611814346}}]}, 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, 
+        Mod[1 - Automatic, 1], {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+     GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], Dashing[{0, Small}], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.831373, 0.882353, 1], Opacity[1.]}], 
+     ArrowBox[{{0.2936708860759494, 0.3624472573839662}, {0.4978902953586498, 
+      0.3658227848101264}}]}, 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, 
+        Mod[1 - Automatic, 1], {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+     GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], Dashing[{0, Small}], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.831373, 0.882353, 1], Opacity[1.]}], 
+     ArrowBox[{{1.0413502109704642`, 0.3725738396624473}, {
+      1.1729957805907174`, 0.3742616033755274}}]}, 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, 
+        Mod[1 - Automatic, 1], {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[Opacity[1.]], EdgeForm[{
+     GrayLevel[0.], Opacity[1.], AbsoluteThickness[1], Dashing[{0, Small}], 
+     JoinForm[{"Miter", 12.15}]}], EdgeForm[None], FaceForm[{RGBColor[
+     0.831373, 0.882353, 1], Opacity[1.]}], 
+     ArrowBox[{{0.49683896267558453`, 0.27979174268152396`}, {
+      1.1771248797019882`, 0.27979174268152396`}}]}, InsetBox[
+     StyleBox[Cell["L",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.027004219409282708`, 0.42995780590717303`}, {
+     Left, Top}, {0.05738396624472573, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["M",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.2008438818565401, 0.9734177215189876}, {
+     Left, Top}, {0.05569620253164562, Automatic},
+     Alignment->{Left, Top}], 
+    StyleBox[InsetBox[
+      StyleBox[Cell["N",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       Background->RGBColor[
+        1., 0.8500038147554742, 
+         0.8500038147554742]], {1.053374124074958, 0.8900661446200197}, {
+      Left, Top}, {0.03544303797468351, Automatic},
+      Alignment->{Left, Top}],
+     FontSize->25], InsetBox[
+     StyleBox[Cell["O",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {1.0632911392405064`, 0.5312236286919833}, {
+     Left, Top}, {0.05400843881856554, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["P",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.31054852320675114`, 0.517721518987342}, {
+     Left, Top}, {0.06075949367088607, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["Q",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.308860759493671, 0.6375527426160339}, {
+     Left, Top}, {0.042194092827004204`, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["R",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.30379746835443044`, 0.8333333333333335}, {
+     Left, Top}, {0.07088607594936708, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["\[Omega]2",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.06075949367088609, 0.8012658227848104}, {
+     Left, Top}, {0.06582278481012657, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["\[Omega]3",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {1.237130801687764, 0.647679324894515}, {
+     Left, Baseline},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["\[Phi]",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.1907172995780591, 0.5059071729957807}, {
+     Left, Top}, {0.06075949367088612, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["\[Chi]",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.2531645569620254, 0.838396624472574}, {
+     Left, Top}, {0.04388185654008436, Automatic},
+     Alignment->{Left, Top}], 
+    {AbsolutePointSize[10.232929922807546`], AbsoluteThickness[1], 
+     Dashing[{Medium, Medium}], JoinForm[{"Miter", 12.15}], 
+     Arrowheads[{{-0.014723125024327186`, 
+        Mod[1 - Automatic, 1], {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}, {0.014723125024327186`, Automatic, {
+         GraphicsBox[{
+           EdgeForm[None], 
+           Dashing[{}], 
+           
+           LineBox[{{{-1, 0.5}, {0, 0}, {-1, -0.5}}, {{0, 0.5}, {
+              0, -0.5}}}]}], 0}}}], StrokeForm[{RGBColor[1, 0, 0], Opacity[
+     1.]}], EdgeForm[{RGBColor[0.6666666666666666, 1., 1.], Opacity[1.], 
+     AbsoluteThickness[1], JoinForm[{"Miter", 12.15}]}], EdgeForm[None], 
+     FaceForm[{RGBColor[0.831373, 0.882353, 1], Opacity[1.]}], 
+     ArrowBox[{{0.29563932002956395`, 0.9671101256467112}, {
+      1.0376940133037695`, 0.9745011086474502}}]}, 
+    InsetBox["", {0.6696230598669624, 0.993717664449372}, {
+     Left, Baseline}, {0.0059127864005912795`, 0.08425720620842574}, {{1., 
+     0.}, {0., 1.}},
+     Alignment->{Left, Top}], 
+    StyleBox[InsetBox[
+      StyleBox[Cell["t2",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       Background->RGBColor[
+        1., 0.8500038147554742, 
+         0.8500038147554742]], {0.6607538802660755, 0.9833702882483373}, {
+      Left, Top}, {0.05764966740576494, Automatic},
+      Alignment->{Left, Top}],
+     FontSize->30], 
+    StyleBox[InsetBox[
+      StyleBox[Cell["\[Theta]2",
+        GeneratedCell->False,
+        CellAutoOverwrite->False,
+        CellBaseline->Baseline,
+        TextAlignment->Left],
+       Background->RGBColor[
+        1., 0.8500038147554742, 
+         0.8500038147554742]], {0.7509238728750924, 0.8577235772357727}, {
+      Left, Baseline},
+      Alignment->{Left, Top}],
+     FontSize->25], InsetBox[
+     StyleBox[Cell["\[Phi]",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->25,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.7671840354767185, 0.8104212860310422}, {
+     Left, Top}, {0.06060606060606055, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["z2",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->25,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.3577235772357724, 0.41722099039172217`}, {
+     Left, Top}, {0.05469327420546932, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["z3",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->25,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {1.0687361419068737`, 0.4260901699926092}, {
+     Left, Top}, {0.06060606060606055, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["tc2",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->25,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.7021433850702143, 0.33148558758314883`}, {
+     Left, Top}, {0.09608277900960838, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["R3",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->25,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.5735402808573542, 0.21470805617147093`}, {
+     Left, Top}, {0.07834441980783446, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       0.9647058823529412, 0.9294117647058824, 
+        0.8392156862745098]], {1.0676213206046141`, 0.4220365950676214}, {
+     Left, Top}, {0.03818615751789989, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["x3",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {1.0692124105011933`, 0.43476531424025466`}, {
+     Left, Top}, {0.06841686555290383, Automatic},
+     Alignment->{Left, Top}], InsetBox[
+     StyleBox[Cell["x2",
+       GeneratedCell->False,
+       CellAutoOverwrite->False,
+       CellBaseline->Baseline,
+       TextAlignment->Left],
+      FontSize->24,
+      Background->RGBColor[
+       1., 0.8500038147554742, 
+        0.8500038147554742]], {0.35003977724741453`, 0.4220365950676215}, {
+     Left, Top}, {0.05409705648369123, Automatic},
+     Alignment->{Left, Top}]},
+   ContentSelectable->True,
+   ImagePadding->{{0., 0.}, {0., 0.}},
+   ImageSize->{838., 630.},
+   PlotRange->{{0., 1.3333333333333335`}, {0., 1.}},
+   PlotRangePadding->Automatic]], "Input"]
+}], "Section",
+ CellChangeTimes->{{3.616585885988562*^9, 3.6165858983260403`*^9}, {
+  3.616586000513657*^9, 3.616586009906604*^9}, {3.616586073860593*^9, 
+  3.6165864813993177`*^9}, {3.6165865138068542`*^9, 3.616586806363318*^9}, {
+  3.616587014714652*^9, 3.616587054351596*^9}, {3.6165870960000677`*^9, 
+  3.616587121068798*^9}, {3.616647785917622*^9, 3.616647787285633*^9}, {
+  3.616647840243485*^9, 3.616647970298286*^9}, {3.616648010813529*^9, 
+  3.616648274705345*^9}, {3.616735213884883*^9, 3.616735261337881*^9}, {
+  3.6167511222149563`*^9, 3.61675112699406*^9}},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[BoxData[{
+ StyleBox[
+  RowBox[{
+   RowBox[{"LP", "=", 
+    RowBox[{
+     RowBox[{"Abs", "[", "R3", "]"}], "-", "tc2", "-", "x2"}]}], ";"}],
+  Background->RGBColor[1, 0.85, 0.85]], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Chi]", "=", 
+   RowBox[{"ArcTan", "[", 
+    RowBox[{"LP", "/", "\[Omega]2lens2"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"LM", "=", 
+   RowBox[{"Sqrt", "[", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"\[Omega]2lens2", "^", "2"}], ")"}], "+", 
+     RowBox[{"(", 
+      RowBox[{"LP", "^", "2"}], ")"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"sin\[Theta]2\[Phi]", "=", 
+   RowBox[{
+    RowBox[{"Sin", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"Pi", "/", "2"}], ")"}], "+", "\[Chi]", "-", 
+      RowBox[{"Abs", "[", "\[Theta]2lens2", "]"}]}], "]"}], "*", 
+    RowBox[{"LM", "/", 
+     RowBox[{"Abs", "[", "R3", "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]", "=", 
+   RowBox[{
+    RowBox[{"-", 
+     RowBox[{"Abs", "[", "\[Theta]2lens2", "]"}]}], "+", 
+    RowBox[{"ArcSin", "[", "sin\[Theta]2\[Phi]", "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"t2", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"\[Omega]2lens2", "-", 
+      RowBox[{"(", 
+       RowBox[{"LP", "*", 
+        RowBox[{"Tan", "[", "\[Phi]", "]"}]}], ")"}]}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"Tan", "[", "\[Phi]", "]"}], "+", 
+      RowBox[{"Tan", "[", "\[Theta]2lens2", "]"}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x3", "=", 
+   RowBox[{
+    RowBox[{"Abs", "[", "R3", "]"}], "*", 
+    RowBox[{"(", 
+     RowBox[{"1", "-", 
+      RowBox[{"Cos", "[", "\[Phi]", "]"}]}], ")"}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.616648316665655*^9, 3.616648528913417*^9}, {
+   3.616714318082699*^9, 3.616714361449708*^9}, {3.616714393692745*^9, 
+   3.616714440679652*^9}, {3.6167145368132963`*^9, 3.6167145770276747`*^9}, {
+   3.6167166100113087`*^9, 3.616716619174477*^9}, {3.616735330822557*^9, 
+   3.616735344054196*^9}, {3.616737652870262*^9, 3.616737713207944*^9}, {
+   3.616737763857596*^9, 3.616737765741538*^9}, {3.616738659186541*^9, 
+   3.6167387299096193`*^9}, {3.61673883836493*^9, 3.616738880265325*^9}, {
+   3.616739058388459*^9, 3.616739067657715*^9}, 3.616749435138625*^9, {
+   3.616750889325696*^9, 3.616750901863214*^9}, {3.616751099734963*^9, 
+   3.616751103913093*^9}, {3.6167531986296597`*^9, 3.6167531988511972`*^9}, {
+   3.616753274540194*^9, 3.6167532752097473`*^9}, {3.616753647021098*^9, 
+   3.6167536711241713`*^9}, {3.616754646321988*^9, 3.616754691992915*^9}},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   StyleBox["(*", "Subsubsection"], 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      StyleBox[
+       RowBox[{"The", " ", "ABCD", " ", "matrix", " ", "from", " ", "BBO"}], 
+       "Subsubsection"], 
+      StyleBox[" ", "Subsubsection"], 
+      StyleBox["-", "Subsubsection"], 
+      StyleBox["  ", "Subsubsection"], 
+      StyleBox[
+       RowBox[{
+        StyleBox["le", "Subsubsection"], 
+        StyleBox[
+         RowBox[{"ns", " ", "1"}], "Subsection"]}], "Subsubsection"], 
+      StyleBox[" ", "Subsubsection"], 
+      StyleBox["-", "Subsubsection"], 
+      StyleBox[" ", "Subsubsection"], 
+      StyleBox[
+       RowBox[{"lens", " ", "2"}], "Subsection"], 
+      StyleBox[" ", "Subsubsection"], 
+      StyleBox["-", "Subsubsection"], 
+      StyleBox["  ", "Subsubsection"], 
+      RowBox[{
+       StyleBox["air", "Subsubsection"], 
+       StyleBox[" ", "Subsubsection"], "\n", 
+       RowBox[{"(", "\[NoBreak]", GridBox[{
+          {"\[Omega]3"},
+          {"\[Theta]3"}
+         }], "\[NoBreak]", ")"}]}]}], "=", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"n2", "-", "nair"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"nair", "*", "R3"}], ")"}]}], 
+          RowBox[{"n2", "/", "nair"}]}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "t2"},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"n1", "-", "n2"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"n2", "*", "R2"}], ")"}]}], 
+          RowBox[{"n1", "/", "n2"}]}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "t1"},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"nair", "-", "n1"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"n1", "*", "R1"}], ")"}]}], 
+          RowBox[{"nair", "/", "n1"}]}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"(", 
+           RowBox[{"d", "+", "z1"}], ")"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"\[Omega]0"},
+         {"\[Theta]0"}
+        }], "\[NoBreak]", ")"}]}]}], ";"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"img3", "=", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"n2", "-", "nair"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"nair", "*", "R3"}], ")"}]}], ",", 
+          RowBox[{"(", 
+           RowBox[{"n2", "/", "nair"}], ")"}]}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "t2"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"n1", "-", "n2"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"n2", "*", "R2"}], ")"}]}], ",", 
+          RowBox[{"(", 
+           RowBox[{"n1", "/", "n2"}], ")"}]}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "t1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"nair", "-", "n1"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"n1", "*", "R1"}], ")"}]}], ",", 
+          RowBox[{"(", 
+           RowBox[{"nair", "/", "n1"}], ")"}]}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", 
+          RowBox[{"(", 
+           RowBox[{"d", "+", "x1"}], ")"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"\[Omega]0", ",", "\[Theta]0"}], "}"}]}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\[Omega]3", "=", 
+     RowBox[{"img3", "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"\[Theta]3", "=", 
+     RowBox[{"img3", "[", 
+      RowBox[{"[", "2", "]"}], "]"}]}], ";"}], "*)"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"T3lens", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "t2"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"A3lens", "=", 
+     RowBox[{"T3lens", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   
+   RowBox[{
+    RowBox[{"B3lens", "=", 
+     RowBox[{"T3lens", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "2"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   
+   RowBox[{
+    RowBox[{"C3lens", "=", 
+     RowBox[{"T3lens", "[", 
+      RowBox[{"[", 
+       RowBox[{"2", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   
+   RowBox[{
+    RowBox[{"D3lens", "=", 
+     RowBox[{"T3lens", "[", 
+      RowBox[{"[", 
+       RowBox[{"2", ",", "2"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"q3lens", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"A3lens", "*", "q2lens2"}], ")"}], "+", "B3lens"}], ")"}], 
+     "/", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"C3lens", "*", "q2lens2"}], ")"}], "+", "D3lens"}], ")"}]}]}],
+    "\[IndentingNewLine]", 
+   RowBox[{"z3lens", "=", 
+    RowBox[{"Abs", "[", 
+     RowBox[{"Re", "[", "q3lens", "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"z03lens", "=", 
+    RowBox[{"Abs", " ", "[", 
+     RowBox[{"Im", "[", "q3lens", "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"\[Omega]03lens", "=", 
+    RowBox[{"Sqrt", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"\[Lambda]", "*", 
+          RowBox[{"10", "^", 
+           RowBox[{"-", "6"}]}]}], ")"}], "*", "z03lens"}], ")"}], "/", 
+      "Pi"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"\[Omega]3lens", "=", 
+    RowBox[{"Sqrt", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"\[Omega]03lens", "^", "2"}], ")"}], "*", 
+      RowBox[{"(", 
+       RowBox[{"1", "+", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"z3lens", "/", "z03lens"}], ")"}], "^", "2"}], ")"}]}], 
+       ")"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"\[Theta]3lens", "=", 
+    RowBox[{"\[Omega]03lens", "/", "z03lens"}]}], 
+   "\[IndentingNewLine]"}]}]], "Input",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ CellChangeTimes->{{3.616585304441937*^9, 3.61658530534406*^9}, {
+   3.6165856079159927`*^9, 3.6165856308557167`*^9}, {3.616585713821327*^9, 
+   3.616585727207946*^9}, {3.616585780180874*^9, 3.616585832395645*^9}, 
+   3.616585909460889*^9, {3.616648620275238*^9, 3.61664872823409*^9}, {
+   3.616665519147348*^9, 3.6166655216003513`*^9}, 3.6167131179374533`*^9, {
+   3.616733638889203*^9, 3.616733777276596*^9}, {3.616735348252226*^9, 
+   3.61673536576792*^9}, {3.616737522775854*^9, 3.616737548117772*^9}, {
+   3.6167376099689713`*^9, 3.616737644426711*^9}, {3.6167536923841267`*^9, 
+   3.616753841209628*^9}, {3.616754699828779*^9, 3.616754857943041*^9}, {
+   3.616795471206678*^9, 3.616795494719446*^9}},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"T3air", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"1", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"n2", "-", "nair"}], ")"}], "/", 
+        RowBox[{"(", 
+         RowBox[{"nair", "*", "R3"}], ")"}]}], ",", 
+       RowBox[{"(", 
+        RowBox[{"n2", "/", "nair"}], ")"}]}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"A3air", "=", 
+   RowBox[{"T3air", "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"B3air", "=", 
+   RowBox[{"T3air", "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "2"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"C3air", "=", 
+   RowBox[{"T3air", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"D3air", "=", 
+    RowBox[{"T3air", "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ",", "2"}], "]"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"q3air", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"A3air", "*", "q3lens"}], ")"}], "+", "B3air"}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"C3air", "*", "q3lens"}], ")"}], "+", "D3air"}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"z3air", "=", 
+   RowBox[{"Abs", "[", 
+    RowBox[{"Re", "[", "q3air", "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"z03air", "=", 
+   RowBox[{"Abs", " ", "[", 
+    RowBox[{"Im", "[", "q3air", "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"\[Omega]03air", "=", 
+  RowBox[{"Sqrt", "[", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"\[Lambda]", "*", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "6"}]}]}], ")"}], "*", "z03air"}], ")"}], "/", "Pi"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Omega]3air", "=", 
+   RowBox[{"Sqrt", "[", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"\[Omega]03air", "^", "2"}], ")"}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"z3air", "/", "z03air"}], ")"}], "^", "2"}], ")"}]}], 
+      ")"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]3air", "=", 
+   RowBox[{"\[Omega]03air", "/", "z03air"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6167537350263853`*^9, 3.616753735740582*^9}, {
+  3.6167548775624113`*^9, 3.616755133795047*^9}, {3.6167554222690897`*^9, 
+  3.6167554468259897`*^9}, {3.616795162451273*^9, 3.616795164511785*^9}},
+ Background->RGBColor[1, 0.85, 0.85]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{"focus", "=", 
+   RowBox[{"z3air", "-", "x3"}]}]}]], "Input",
+ CellChangeTimes->{{3.6167551745268917`*^9, 3.616755198922441*^9}}],
+
+Cell[BoxData["0.006424006349473417`"], "Output",
+ CellChangeTimes->{3.616794828364037*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{"spotsize", "=", "\[Omega]03air"}]}]], "Input",
+ CellChangeTimes->{{3.6167553870462646`*^9, 3.6167553923077927`*^9}, {
+  3.6167948145204153`*^9, 3.616794824840008*^9}}],
+
+Cell[BoxData["3.4686957755406424`*^-6"], "Output",
+ CellChangeTimes->{3.6167948258394823`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"inangle", "=", "\[Theta]3air"}], "\[IndentingNewLine]"}]], "Input",\
+
+ CellChangeTimes->{{3.616795042859476*^9, 3.6167950922301292`*^9}}],
+
+Cell[BoxData["0.0795615093336723`"], "Output",
+ CellChangeTimes->{3.616795092782692*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.6167951004424458`*^9, 3.6167951588980513`*^9}, {
+  3.6167955412452593`*^9, 3.6167955495978117`*^9}}]
+}, Open  ]]
+},
+ScreenStyleEnvironment->"SlideShow",
+WindowSize->{1366, 713},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (February 7, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 446, 9, 371, "Text"],
+Cell[1006, 31, 128, 3, 46, "Text"],
+Cell[1137, 36, 7699, 212, 1153, "Input"],
+Cell[CellGroupData[{
+Cell[8861, 252, 14229, 319, 641, "Text",
+ CellGroupingRules->{GroupTogetherGrouping, 10001.}],
+Cell[23093, 573, 2512, 63, 225, "Input",
+ CellGroupingRules->{GroupTogetherGrouping, 10001.}],
+Cell[25608, 638, 6673, 195, 703, "Input",
+ CellGroupingRules->{GroupTogetherGrouping, 10001.}]
+}, Open  ]],
+Cell[32296, 836, 2673, 79, 417, "Input"],
+Cell[CellGroupData[{
+Cell[34994, 919, 18969, 426, 772, "Text",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.}],
+Cell[53966, 1347, 2795, 72, 289, "Input",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.}]
+}, Open  ]],
+Cell[56776, 1422, 7542, 232, 831, "Input"],
+Cell[64321, 1656, 2926, 83, 481, "Input"],
+Cell[CellGroupData[{
+Cell[67272, 1743, 21626, 499, 750, "Section"],
+Cell[88901, 2244, 2687, 70, 257, "Input"],
+Cell[91591, 2316, 8149, 243, 795, "Input",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.}],
+Cell[99743, 2561, 2798, 90, 417, "Input"],
+Cell[CellGroupData[{
+Cell[102566, 2655, 186, 4, 81, "Input"],
+Cell[102755, 2661, 90, 1, 47, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[102882, 2667, 225, 4, 81, "Input"],
+Cell[103110, 2673, 94, 1, 49, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[103241, 2679, 172, 4, 81, "Input"],
+Cell[103416, 2685, 88, 1, 47, "Output"]
+}, Open  ]],
+Cell[103519, 2689, 149, 2, 48, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
